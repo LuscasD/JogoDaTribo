@@ -425,6 +425,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -506,6 +507,40 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8490655dd8c45ec4b89340834f98c887, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1653900805}
+  targetOffset: {x: 0, y: 1, z: 0}
+  currentDistance: 12
+  minDistance: 5
+  maxDistance: 25
+  zoomSpeed: 4
+  zoomSmoothing: 8
+  currentPitch: 55
+  minPitch: 20
+  maxPitch: 85
+  currentYaw: 0
+  orbitSensitivity: 3
+  orbitSmoothing: 10
+  followSmoothing: 8
+  autoRotateWithPlayer: 0
+  enableCollision: 1
+  collisionRadius: 0.3
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  orbitMouseButton: 325
+  orbitAltKey: 308
 --- !u!1 &1653900801
 GameObject:
   m_ObjectHideFlags: 0
