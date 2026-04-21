@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MapManager : MonoBehaviour
 {
@@ -62,6 +63,11 @@ public class MapManager : MonoBehaviour
 		clearedNodes.Add(nodeID);
 	}
 	
+
+	public void GoToScene(string sceneName)
+	{
+		SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+	}
 	//funções de troca de cena
 	//fade in fade out?? overlay no canvas, dontdestroyonload
 }

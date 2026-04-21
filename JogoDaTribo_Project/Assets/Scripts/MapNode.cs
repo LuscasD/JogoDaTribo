@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.UI;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -25,6 +25,7 @@ public class MapNode : MonoBehaviour
     [SerializeField] protected MapNodeTypes nodeType;
     [SerializeField] protected string nodeID;
     [SerializeField] protected List<string> connectedIDs = new List<string>();
+
 
     void Awake()
     {
@@ -49,14 +50,25 @@ public class MapNode : MonoBehaviour
         }
     }
 
-
-    void Update()
-    {
-        
-    }
-
     void OnClick()
     {
-        transform.position += Vector3.right * 10;
+        mapManager.AddClearedNode(nodeID);
+        mapManager.SetCurrentMapNodeID(nodeID);
+        mapManager.GoToScene("TestScene");
+    }
+
+
+
+    public string GetID()
+    {
+        return nodeID;
+    }
+
+    public List<string> GetConnectedIDs()
+    {
+        return connectedIDs;
     }
 }
+
+
+
