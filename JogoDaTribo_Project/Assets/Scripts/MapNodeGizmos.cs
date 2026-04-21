@@ -9,11 +9,11 @@ public class MapNodeGizmos : MonoBehaviour
 {
 
     List<MapNode> mapNodes;
-    List<Vector3> linePoints;
+    List<Vector3> linePoints = new List<Vector3>();
     public void OnDrawGizmos() {
         linePoints.Clear();
+        linePoints.TrimExcess();
         mapNodes = FindObjectsOfType<MapNode>().ToList<MapNode>();
-        Debug.Log(mapNodes);
         foreach (var mapNode in mapNodes)
         {
             string nodeID = mapNode.GetID();
