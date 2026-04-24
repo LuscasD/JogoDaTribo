@@ -7,7 +7,6 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 0.4f;
     [SerializeField] private float knockbackForce = 5f;
-    [SerializeField] private LayerMask enemyLayer;
 
     private float lastAttackTime = -999f;
 
@@ -38,11 +37,16 @@ public class PlayerAttack : MonoBehaviour
         lastAttackTime = Time.time;
 
         Vector3 center = transform.position + transform.forward * (attackRange * 0.5f);
-        Collider[] hits = Physics.OverlapSphere(center, attackRange * 0.5f, enemyLayer);
+        Collider[] hits = Physics.OverlapSphere(center, attackRange * 0.5f);
 
         foreach (var hit in hits)
         {
+            if (hit.gameObject == gameObject) continue;
+
             var enemy = hit.GetComponent<Enemy>();
+            if (enemy == null)
+                enemy = hit.GetComponentInParent<Enemy>();
+
             if (enemy != null)
             {
                 Vector3 knockback = (hit.transform.position - transform.position).normalized * knockbackForce;

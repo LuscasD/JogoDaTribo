@@ -1,12 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
-
 
 public class MapNode : MonoBehaviour
 {
@@ -19,56 +13,48 @@ public class MapNode : MonoBehaviour
         Boss,
     }
 
-    MapManager mapManager;
-    Button button;
-    MapNode currentMapNode;
     [SerializeField] protected MapNodeTypes nodeType;
     [SerializeField] protected string nodeID;
+    [SerializeField] protected string sceneToLoad = "ScenaDeTeste";
     [SerializeField] protected List<string> connectedIDs = new List<string>();
 
+    private MapManager mapManager;
+    private Button button;
+    private MapNode currentMapNode;
 
     void Awake()
     {
         mapManager = MapManager.Instance;
         button = GetComponent<Button>();
-
         button.onClick.AddListener(OnClick);
 
         if (mapManager.GetCurrentMapNodeID() == nodeID)
-        {
             mapManager.SetCurrentMapNode(this);
-        }
     }
-    
+
     void Start()
     {
         currentMapNode = mapManager.GetCurrentMapNode();
 
-        if (mapManager.GetClearedNodes().Contains(nodeID) || !currentMapNode.connectedIDs.Contains(nodeID))
+        if (currentMapNode == null)
         {
             button.interactable = false;
+            return;
         }
+
+        bool alreadyCleared = mapManager.GetClearedNodes().Contains(nodeID);
+        bool isReachable    = currentMapNode.connectedIDs.Contains(nodeID);
+
+        if (alreadyCleared || !isReachable)
+            button.interactable = false;
     }
 
     void OnClick()
     {
-        mapManager.AddClearedNode(nodeID);
         mapManager.SetCurrentMapNodeID(nodeID);
-        mapManager.GoToScene("TestScene");
+        mapManager.GoToScene(sceneToLoad);
     }
 
-
-
-    public string GetID()
-    {
-        return nodeID;
-    }
-
-    public List<string> GetConnectedIDs()
-    {
-        return connectedIDs;
-    }
+    public string GetID() => nodeID;
+    public List<string> GetConnectedIDs() => connectedIDs;
 }
-
-
-

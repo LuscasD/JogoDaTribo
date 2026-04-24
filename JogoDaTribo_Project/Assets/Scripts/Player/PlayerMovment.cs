@@ -9,22 +9,22 @@ public class PlayerMovment : MonoBehaviour
     [SerializeField] private float sprintSpeed = 9f;
     [SerializeField] private bool enableSprint = true;
 
-    [Header("Suavização")]
+    [Header("Suavizaï¿½ï¿½o")]
     [SerializeField] private float acceleration = 10f;
     [SerializeField] private float deceleration = 12f;
 
-    [Header("Rotação")]
+    [Header("Rotaï¿½ï¿½o")]
     [SerializeField] private bool rotateTowardsMovement = true;
     [SerializeField] private float rotationSpeed = 15f;
 
     [Header("Gravidade")]
     [SerializeField] private float gravity = -20f;
 
-    [Header("Câmera (Opcional)")]
-    [Tooltip("Se atribuída, a direção do movimento é relativa à câmera.")]
+    [Header("Cï¿½mera (Opcional)")]
+    [Tooltip("Se atribuï¿½da, a direï¿½ï¿½o do movimento ï¿½ relativa ï¿½ cï¿½mera.")]
     [SerializeField] private Camera topDownCamera;
 
-    [Header("Referências (Opcional)")]
+    [Header("Referï¿½ncias (Opcional)")]
     [SerializeField] private Animator animator;
 
     // Componentes
@@ -61,7 +61,7 @@ public class PlayerMovment : MonoBehaviour
         UpdateAnimator();
     }
 
-    /// Lê o input do jogador e converte para direção 3D relativa à câmera.
+    /// Lï¿½ o input do jogador e converte para direï¿½ï¿½o 3D relativa ï¿½ cï¿½mera.
     private void ReadInput()
     {
         float horizontal = Input.GetAxisRaw("Horizontal"); // A/D
@@ -69,13 +69,13 @@ public class PlayerMovment : MonoBehaviour
 
         isSprinting = enableSprint && Input.GetKey(KeyCode.LeftShift);
 
-        // Constrói a direção no plano XZ
+        // Constrï¿½i a direï¿½ï¿½o no plano XZ
         Vector3 rawInput = new Vector3(horizontal, 0f, vertical);
 
         if (rawInput.sqrMagnitude > 1f)
             rawInput.Normalize();
 
-        // Se houver câmera, torna o movimento relativo à sua orientação (ignora Y)
+        // Se houver cï¿½mera, torna o movimento relativo ï¿½ sua orientaï¿½ï¿½o (ignora Y)
         if (topDownCamera != null)
         {
             Vector3 camForward = topDownCamera.transform.forward;
@@ -94,7 +94,7 @@ public class PlayerMovment : MonoBehaviour
         }
     }
 
-    /// Acumula gravidade quando o personagem está no ar.
+    /// Acumula gravidade quando o personagem estï¿½ no ar.
     private void ApplyGravity()
     {
         if (controller.isGrounded && verticalVelocity < 0f)
@@ -103,7 +103,7 @@ public class PlayerMovment : MonoBehaviour
             verticalVelocity += gravity * Time.deltaTime;
     }
 
-    /// Move o CharacterController com aceleração/desaceleração suave.
+    /// Move o CharacterController com aceleraï¿½ï¿½o/desaceleraï¿½ï¿½o suave.
     private void ApplyMovement()
     {
         float targetSpeed = isSprinting ? sprintSpeed : moveSpeed;
@@ -122,7 +122,7 @@ public class PlayerMovment : MonoBehaviour
         controller.Move(finalMotion * Time.deltaTime);
     }
 
-    /// Rotaciona o personagem suavemente na direção do movimento.
+    /// Rotaciona o personagem suavemente na direï¿½ï¿½o do movimento.
     private void ApplyRotation()
     {
         if (!rotateTowardsMovement) return;
@@ -136,7 +136,7 @@ public class PlayerMovment : MonoBehaviour
         );
     }
 
-    /// Atualiza parâmetros do Animator para blend trees.
+    /// Atualiza parï¿½metros do Animator para blend trees.
     private void UpdateAnimator()
     {
         if (animator == null) return;
@@ -152,10 +152,10 @@ public class PlayerMovment : MonoBehaviour
     }
 
     // -------------------------------------------------------
-    // API pública
+    // API pï¿½blica
     // -------------------------------------------------------
 
-    /// Aplica um impulso externo no plano horizontal (knockback, explosão, etc).
+    /// Aplica um impulso externo no plano horizontal (knockback, explosï¿½o, etc).
     public void ApplyKnockback(Vector3 force)
     {
         currentVelocity += new Vector3(force.x, 0f, force.z);
@@ -171,15 +171,15 @@ public class PlayerMovment : MonoBehaviour
         verticalVelocity = 0f;
     }
 
-    /// Direção normalizada do movimento atual.
+    /// Direï¿½ï¿½o normalizada do movimento atual.
     public Vector3 GetMoveDirection() => currentVelocity.normalized;
 
-    /// True se o personagem está se movendo.
+    /// True se o personagem estï¿½ se movendo.
     public bool IsMoving => currentVelocity.sqrMagnitude > 0.01f;
 
-    /// True se o personagem está em sprint.
+    /// True se o personagem estï¿½ em sprint.
     public bool IsSprinting => isSprinting;
 
-    /// True se o personagem está no chão.
+    /// True se o personagem estï¿½ no chï¿½o.
     public bool IsGrounded => controller.isGrounded;
 }

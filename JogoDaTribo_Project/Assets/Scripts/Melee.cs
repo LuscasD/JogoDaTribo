@@ -10,9 +10,9 @@ public class Melee : Enemy
 
     [Header("Combate")]
     [SerializeField] private float stopDistance = 1.5f;
-    [SerializeField] private float dashForce = 8f;
+    [SerializeField] private float dashSpeed = 12f;
+    [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private int attackDamage = 1;
-    [SerializeField] private float knockbackForce = 4f;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private float stunDuration = 0.4f;
 
@@ -56,7 +56,8 @@ public class Melee : Enemy
 
     private void HandleChasing()
     {
-        if (playerTransform == null) return;
+        if (playerTransform == null || !nav.isOnNavMesh) return;
+
         nav.SetDestination(playerTransform.position);
 
         if (!nav.pathPending && nav.remainingDistance <= stopDistance)
@@ -75,24 +76,35 @@ public class Melee : Enemy
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
+        if (playerTransform == null || !nav.isOnNavMesh) { isAttacking = false; yield break; }
 
         yield return RotateUntilAligned(playerTransform, 640f);
 
-        nav.enabled = false;
-        Dash();
-        yield return new WaitForSeconds(0.2f);
+        // Dash usando nav.Move — fica na superfície do NavMesh, sem física
+        nav.ResetPath();
+        Vector3 dashDir = transform.forward;
+        dashDir.y = 0;
+        dashDir.Normalize();
+
+        float elapsed = 0f;
+        while (elapsed < dashDuration)
+        {
+            // Para o dash antes de invadir o collider do player
+            if (playerTransform != null &&
+                Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 0.9f)
+                break;
+
+            nav.Move(dashDir * dashSpeed * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
         TryDamagePlayer();
-        nav.enabled = true;
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
 
-        if (playerTransform == null)
-        {
-            currentState = State.Idle;
-            yield break;
-        }
-
+        if (playerTransform == null) { currentState = State.Idle; yield break; }
         float dist = Vector3.Distance(transform.position, playerTransform.position);
         currentState = dist > stopDistance * 1.5f ? State.Chasing : State.Attacking;
     }
@@ -102,7 +114,7 @@ public class Melee : Enemy
         if (playerHealth == null || playerTransform == null) return;
         if (Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 2f)
         {
-            Vector3 knockback = (playerTransform.position - transform.position).normalized * knockbackForce;
+            Vector3 knockback = (playerTransform.position - transform.position).normalized * 4f;
             playerHealth.TakeDamage(attackDamage, knockback);
         }
     }
@@ -114,28 +126,28 @@ public class Melee : Enemy
 
         StopAllCoroutines();
         isAttacking = false;
+        nav.ResetPath();
         StartCoroutine(StunRoutine(knockbackDir));
     }
 
     private IEnumerator StunRoutine(Vector3 knockbackDir)
     {
         currentState = State.TakingDamage;
-        nav.ResetPath();
-        nav.enabled = false;
 
-        if (knockbackDir != Vector3.zero)
-            rb.AddForce(knockbackDir, ForceMode.Impulse);
-
-        yield return new WaitForSeconds(stunDuration);
+        float elapsed = 0f;
+        while (elapsed < stunDuration)
+        {
+            if (knockbackDir != Vector3.zero && nav.isOnNavMesh)
+            {
+                float decel = 1f - (elapsed / stunDuration);
+                nav.Move(knockbackDir * decel * Time.deltaTime);
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
 
         if (this == null) yield break;
-        nav.enabled = true;
         currentState = playerTransform != null ? State.Chasing : State.Idle;
-    }
-
-    private void Dash()
-    {
-        rb.AddForce(transform.forward * dashForce, ForceMode.Impulse);
     }
 
     private IEnumerator RotateUntilAligned(Transform target, float rotSpeed, float tolerance = 1f)

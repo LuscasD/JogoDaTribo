@@ -1,33 +1,36 @@
-using System.Collections;
+#if UNITY_EDITOR
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEditor;
 using System.Linq;
+using UnityEditor;
+using UnityEngine;
 
 public class MapNodeGizmos : MonoBehaviour
 {
+    private List<MapNode> mapNodes;
+    private List<Vector3> linePoints = new List<Vector3>();
 
-    List<MapNode> mapNodes;
-    List<Vector3> linePoints = new List<Vector3>();
-    public void OnDrawGizmos() {
+    public void OnDrawGizmos()
+    {
         linePoints.Clear();
-        linePoints.TrimExcess();
-        mapNodes = FindObjectsOfType<MapNode>().ToList<MapNode>();
+        mapNodes = FindObjectsOfType<MapNode>().ToList();
+
         foreach (var mapNode in mapNodes)
         {
             string nodeID = mapNode.GetID();
             List<string> connectedIDs = mapNode.GetConnectedIDs();
             Handles.Label(mapNode.transform.position, nodeID);
-            foreach (var connect in mapNodes)
+
+            foreach (var other in mapNodes)
             {
-                if (connectedIDs.Contains(connect.GetID()))
+                if (connectedIDs.Contains(other.GetID()))
                 {
                     linePoints.Add(mapNode.transform.position);
-                    linePoints.Add(connect.transform.position);
+                    linePoints.Add(other.transform.position);
                 }
             }
         }
+
         Gizmos.DrawLineList(linePoints.ToArray());
     }
 }
+#endif
