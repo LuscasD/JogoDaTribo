@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -11,17 +9,20 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected float speed;
     [SerializeField] protected float vision_radius;
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
         life = MaxLife;
     }
 
-    // Update is called once per frame
-    void Update()
+    public virtual void TakeDamage(int damage, Vector3 knockbackDir = default)
     {
-        
+        life -= damage;
+        if (life <= 0)
+            Die();
+    }
+
+    protected virtual void Die()
+    {
+        Destroy(gameObject);
     }
 }

@@ -66,11 +66,13 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Melee.cs" />
     <Compile Include="Assets\Scripts\Enemy.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerHealth.cs" />
     <Compile Include="Assets\Scripts\TestSceneButton.cs" />
     <Compile Include="Assets\Scripts\Player\TopDownCamera3D.cs" />
     <Compile Include="Assets\Scripts\Mapa\MapManager.cs" />
     <Compile Include="Assets\Scripts\Mapa\MapNode.cs" />
     <Compile Include="Assets\Scripts\Mapa\MapNodeGizmos.cs" />
+    <Compile Include="Assets\Scripts\Player\PlayerAttack.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerMovment.cs" />
   </ItemGroup>
   <ItemGroup>
