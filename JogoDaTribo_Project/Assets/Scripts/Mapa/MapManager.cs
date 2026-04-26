@@ -24,11 +24,13 @@ public class MapManager : MonoBehaviour
 	private MapNode currentMapNode;
 	private string currentMapNodeID;
 	private List<string> clearedNodes;
+	private List<MapNode> nodeList;
 
 
     private void Awake()
     {
         clearedNodes = new List<string>();
+		nodeList = new List<MapNode>();
 		currentMapNodeID = "Start";
     }
 
@@ -64,8 +66,40 @@ public class MapManager : MonoBehaviour
 	}
 	
 
+	public void AddNodeToList(MapNode node)
+	{
+		nodeList.Add(node);
+	}
+
+	public MapNode GetNodeFromID(string nodeID)
+	{
+		foreach (var node in nodeList)
+		{
+			if(node.GetID() == nodeID)
+				return node;
+		}
+		return null;
+	}
+
+	public List<MapNode> GetConnectedNodes(MapNode mapNode)
+	{
+		List<string> list = mapNode.GetConnectedIDs();
+		List<MapNode> connectedNodes = new List<MapNode>();
+		foreach (var node in nodeList)
+		{
+			if (list.Contains(node.GetID()))
+			{
+				connectedNodes.Add(node);
+			}
+		}
+		
+		return connectedNodes;
+	}
+
+
 	public void GoToScene(string sceneName)
 	{
+		nodeList.Clear();
 		SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
 	}
 	//funções de troca de cena

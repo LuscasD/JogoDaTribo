@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,7 +22,9 @@ public class MapNode : MonoBehaviour
     private MapManager mapManager;
     private Button button;
     private Image nodeIcon;
+    private LineRenderer lineRenderer;
     private MapNode currentMapNode;
+    private List<MapNode> connectedNodes;
 
     void Awake()
     {
@@ -31,7 +32,9 @@ public class MapNode : MonoBehaviour
         button = GetComponent<Button>();
         button.onClick.AddListener(OnClick);
         nodeIcon = GetComponent<Image>();
+        lineRenderer = GetComponent<LineRenderer>();
 
+        //seleção da sprite
         switch (nodeType)
         {
             case MapNodeTypes.Start:
@@ -54,8 +57,21 @@ public class MapNode : MonoBehaviour
                 break;
         }
 
+
         if (mapManager.GetCurrentMapNodeID() == nodeID)
+        {
             mapManager.SetCurrentMapNode(this);
+            lineRenderer.startColor = Color.white;
+            lineRenderer.endColor = Color.white;
+        } else
+        {
+            lineRenderer.startColor = Color.gray;
+            lineRenderer.endColor = Color.gray;
+        }
+        
+        
+
+        mapManager.AddNodeToList(this);
     }
 
     void Start()
@@ -68,16 +84,51 @@ public class MapNode : MonoBehaviour
             return;
         }
 
+        //desativar botões inacessíveis
         bool alreadyCleared = mapManager.GetClearedNodes().Contains(nodeID);
         bool isReachable    = currentMapNode.connectedIDs.Contains(nodeID);
 
+        if(nodeType == MapNodeTypes.Start && !alreadyCleared)
+            mapManager.AddClearedNode(nodeID);
+
         if (alreadyCleared || !isReachable)
             button.interactable = false;
-            if (alreadyCleared)
+
+
+        //criar linhas e trocar sprite de node terminado
+        int index = 0;
+        if (alreadyCleared)
+        {
+            nodeIcon.sprite = Resources.Load<Sprite>("ClearedIcon");
+            nodeIcon.color = new Color(255,255,255,128);
+
+            foreach (var ID in connectedIDs)
             {
-                nodeIcon.sprite = Resources.Load<Sprite>("ClearedIcon");
-                nodeIcon.color = new Color(255,255,255,128); 
+                if (mapManager.GetClearedNodes().Contains(ID))
+                {
+                    MapNode node = mapManager.GetNodeFromID(ID);
+                    lineRenderer.positionCount = 2;
+                    lineRenderer.SetPosition(index, node.transform.position);
+                    lineRenderer.SetPosition(index + 1, transform.position);
+                    lineRenderer.startColor = Color.yellow;
+                    lineRenderer.endColor = Color.yellow;
+                    return;
+                }
+
             }
+        }
+        //criar resto das linhas
+        connectedNodes = mapManager.GetConnectedNodes(this);
+        lineRenderer.positionCount = connectedNodes.Count * 2;
+        if (connectedNodes.Count > 0)
+            foreach (var node in connectedNodes)
+            {
+                lineRenderer.SetPosition(index, node.transform.position);
+                lineRenderer.SetPosition(index + 1, transform.position);
+                index = index + 2;
+            }
+
+        
     }
 
     void OnClick()
