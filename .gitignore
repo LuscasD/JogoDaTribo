@@ -45,3 +45,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 /JogoDaTribo_Project/.vscode
 JogoDaTribo_Project/ProjectSettings/EditorSettings.asset
+JogoDaTribo_Project/Assembly-CSharp.csproj
