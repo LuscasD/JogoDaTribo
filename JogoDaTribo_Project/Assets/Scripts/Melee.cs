@@ -1,235 +1,183 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class Melee : Enemy
 {
-
     private NavMeshAgent nav;
-    
-    
-    [SerializeField]
-    private float stopDistance, dashForce;
-    
+    private Transform playerTransform;
+    private PlayerHealth playerHealth;
 
-    [SerializeField] Transform playerPos;
-    [SerializeField] State currentState;
+    [Header("Combate")]
+    [SerializeField] private float stopDistance = 1.5f;
+    [SerializeField] private float dashSpeed = 12f;
+    [SerializeField] private float dashDuration = 0.15f;
+    [SerializeField] private int attackDamage = 1;
+    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] private float stunDuration = 0.4f;
 
-    //Helpers
-    float timer;
-    bool isAttacking = false;
+    [SerializeField] private State currentState;
+    private bool isAttacking;
 
+    private enum State { Idle, Chasing, Attacking, TakingDamage }
 
-    private enum State
+    protected override void Start()
     {
-        Idle,
-        Chasing,
-        Attacking,
-        TakingDamage
-    }
-
-    
-    void Start()
-    {
-        //Nav Variables
+        base.Start();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = speed;
         nav.stoppingDistance = stopDistance;
-
-
         currentState = State.Idle;
 
-    
+        var player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerTransform = player.transform;
+            playerHealth = player.GetComponent<PlayerHealth>();
+        }
     }
 
-
-
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        //StateMachine
-
-
-
         switch (currentState)
         {
-            case State.Idle:
-                HandleIdle();
-                break;
-            case State.Chasing:
-                HandleChasing(playerPos);
-                break;
-            case State.Attacking:
-                HandleAttacking();
-                break;
-            case State.TakingDamage:
-                HandleTakingDamage();
-                break;
+            case State.Idle:      HandleIdle();      break;
+            case State.Chasing:   HandleChasing();   break;
+            case State.Attacking: HandleAttacking(); break;
         }
-
     }
 
     private void HandleIdle()
     {
-        
-        Transform target = null;     
-
-        Collider[] hits = Physics.OverlapSphere(transform.position, vision_radius);
-
-
-        foreach (var hit in hits)
-        {
-            if (hit.CompareTag("Player"))
-            {
-                target = hit.transform;
-                break;
-            }
-        }
-
-        
-        if (target != null)
-        {
-            nav.SetDestination(target.position);
+        if (playerTransform == null) return;
+        if (Vector3.Distance(transform.position, playerTransform.position) <= vision_radius)
             currentState = State.Chasing;
-        }
     }
 
-    private void HandleChasing(Transform target)
+    private void HandleChasing()
     {
-    
-        
-        timer += Time.deltaTime;
-        print(nav.remainingDistance);
-      
+        if (playerTransform == null || !nav.isOnNavMesh) return;
 
-        if (timer > 0.2f)
-        {
-           
-            timer = 0f;
-        }
+        nav.SetDestination(playerTransform.position);
 
-        if (nav.remainingDistance <= stopDistance)
+        if (!nav.pathPending && nav.remainingDistance <= stopDistance)
         {
-            currentState = State.Attacking;
-            timer = 0f;
             nav.ResetPath();
-            return;
+            currentState = State.Attacking;
         }
-
     }
 
-  
     private void HandleAttacking()
     {
-        if (!isAttacking)
+        if (isAttacking) return;
+        StartCoroutine(AttackRoutine());
+    }
+
+    private IEnumerator AttackRoutine()
+    {
+        isAttacking = true;
+        if (playerTransform == null || !nav.isOnNavMesh) { isAttacking = false; yield break; }
+
+        yield return RotateUntilAligned(playerTransform, 640f);
+
+        // Dash usando nav.Move â€” fica na superfÃ­cie do NavMesh, sem fÃ­sica
+        nav.ResetPath();
+        Vector3 dashDir = transform.forward;
+        dashDir.y = 0;
+        dashDir.Normalize();
+
+        float elapsed = 0f;
+        while (elapsed < dashDuration)
         {
-            StartCoroutine(AttackingCouroutine());
-            isAttacking = true;
+            // Para o dash antes de invadir o collider do player
+            if (playerTransform != null &&
+                Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 0.9f)
+                break;
+
+            nav.Move(dashDir * dashSpeed * Time.deltaTime);
+            elapsed += Time.deltaTime;
+            yield return null;
         }
 
+        TryDamagePlayer();
 
-    }
-
-
-    private IEnumerator AttackingCouroutine()
-    {
-        // Rotaciona até alinhar
-        yield return RotateUntilAligned(playerPos, 640f);
-
-        Attack();
-        yield return new WaitForSeconds(0.5f);
-
-        yield return RotateUntilAligned(playerPos, 640f);
-
-        Attack();
-
-        yield return new WaitForSeconds(2f);
-        //Ataca e Ataca
-        //Recuperação
-        //Verifica se o player ainda está no alcance, se sim, ataca novamente, se não, volta para chasing
-
+        yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
+
+        if (playerTransform == null) { currentState = State.Idle; yield break; }
+        float dist = Vector3.Distance(transform.position, playerTransform.position);
+        currentState = dist > stopDistance * 1.5f ? State.Chasing : State.Attacking;
     }
 
-
-
-  
-
-    private void HandleTakingDamage()
+    private void TryDamagePlayer()
     {
-        // Lógica do estado TakingDamage
-    }
-
-
-
-
-
-    //ATAQUE
-
-    private void Attack()
-    {
-        Dash();
-        //Colisões
-    }
-
-    private void Dash()
-    {
-        var dir = transform.forward;
-        rb.AddForce(dir * dashForce, ForceMode.Impulse);
-    }
-
-
-
-    //ROTAÇÃO PARA O ATAQUE
-    private IEnumerator RotateUntilAligned(Transform target, float rotationSpeed, float tolerance = 1f)
-    {
-        while (!IsRotationComplete(target, tolerance))
+        if (playerHealth == null || playerTransform == null) return;
+        if (Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 2f)
         {
-            RotateTowards(target, rotationSpeed);
+            Vector3 knockback = (playerTransform.position - transform.position).normalized * 4f;
+            playerHealth.TakeDamage(attackDamage, knockback);
+        }
+    }
+
+    public override void TakeDamage(int damage, Vector3 knockbackDir = default)
+    {
+        base.TakeDamage(damage, knockbackDir);
+        if (life <= 0) return;
+
+        StopAllCoroutines();
+        isAttacking = false;
+        nav.ResetPath();
+        StartCoroutine(StunRoutine(knockbackDir));
+    }
+
+    private IEnumerator StunRoutine(Vector3 knockbackDir)
+    {
+        currentState = State.TakingDamage;
+
+        float elapsed = 0f;
+        while (elapsed < stunDuration)
+        {
+            if (knockbackDir != Vector3.zero && nav.isOnNavMesh)
+            {
+                float decel = 1f - (elapsed / stunDuration);
+                nav.Move(knockbackDir * decel * Time.deltaTime);
+            }
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (this == null) yield break;
+        currentState = playerTransform != null ? State.Chasing : State.Idle;
+    }
+
+    private IEnumerator RotateUntilAligned(Transform target, float rotSpeed, float tolerance = 1f)
+    {
+        while (target != null && !IsAligned(target, tolerance))
+        {
+            Vector3 dir = (target.position - transform.position).normalized;
+            dir.y = 0;
+            if (dir != Vector3.zero)
+            {
+                Quaternion look = Quaternion.LookRotation(dir);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, look, rotSpeed * Time.deltaTime);
+            }
             yield return null;
         }
     }
 
-    private void RotateTowards(Transform target, float rotationSpeed)
+    private bool IsAligned(Transform target, float tolerance)
     {
-        Vector3 direction = (target.position - transform.position).normalized;
-        direction.y = 0; // Mantém a rotação apenas no eixo Y
-
-        if (direction == Vector3.zero) return;
-
-        Quaternion lookRotation = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.RotateTowards(
-            transform.rotation,
-            lookRotation,
-            rotationSpeed * Time.deltaTime
-        );
+        Vector3 dir = (target.position - transform.position).normalized;
+        dir.y = 0;
+        if (dir == Vector3.zero) return true;
+        return Quaternion.Angle(transform.rotation, Quaternion.LookRotation(dir)) < tolerance;
     }
-
-    private bool IsRotationComplete(Transform target, float tolerance = 1f)
-    {
-        Vector3 direction = (target.position - transform.position).normalized;
-        direction.y = 0;
-        if (direction == Vector3.zero) return true;
-
-        Quaternion lookRotation = Quaternion.LookRotation(direction);
-        float angle = Quaternion.Angle(transform.rotation, lookRotation);
-        return angle < tolerance;
-    }
-
-
-
-
 
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, vision_radius);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, stopDistance);
     }
-
-
 }
