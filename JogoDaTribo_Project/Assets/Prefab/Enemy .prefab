@@ -104,6 +104,14 @@ MonoBehaviour:
   MaxLife: 0
   speed: 0
   vision_radius: 2.77
+  stopDistance: 1.5
+  dashSpeed: 12
+  dashDuration: 0.15
+  attackDamage: 1
+  attackCooldown: 2
+  stunDuration: 0.4
+  knockbackForce: 40
+  currentState: 0
 --- !u!65 &8878281321730417927
 BoxCollider:
   m_ObjectHideFlags: 0

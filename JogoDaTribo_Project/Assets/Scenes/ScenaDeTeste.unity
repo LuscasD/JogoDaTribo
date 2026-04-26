@@ -711,6 +711,10 @@ PrefabInstance:
       propertyPath: vision_radius
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2143623974404911124, guid: 984652b8593620e4389ac9e1f1b7d2c2, type: 3}
+      propertyPath: knockbackForce
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 8461127993606559314, guid: 984652b8593620e4389ac9e1f1b7d2c2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.341092
