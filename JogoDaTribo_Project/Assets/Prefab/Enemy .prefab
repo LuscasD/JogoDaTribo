@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 8878281321730417927}
   - component: {fileID: 5589104111197835237}
   - component: {fileID: 2056224789584038640}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: 'Enemy '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,18 +99,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e422324c988c44448b8c08bb5372ac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 0
-  rb: {fileID: 0}
-  MaxLife: 0
-  speed: 0
-  vision_radius: 2.77
-  stopDistance: 1.5
+  life: 2
+  rb: {fileID: 5589104111197835237}
+  MaxLife: 2
+  speed: 5
+  vision_radius: 10
+  stopDistance: 3
   dashSpeed: 12
   dashDuration: 0.15
   attackDamage: 1
   attackCooldown: 2
   stunDuration: 0.4
-  knockbackForce: 40
+  knockbackForce: 80
   currentState: 0
 --- !u!65 &8878281321730417927
 BoxCollider:
