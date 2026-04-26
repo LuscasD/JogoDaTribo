@@ -43,3 +43,5 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+/JogoDaTribo_Project/.vscode
+JogoDaTribo_Project/ProjectSettings/EditorSettings.asset
