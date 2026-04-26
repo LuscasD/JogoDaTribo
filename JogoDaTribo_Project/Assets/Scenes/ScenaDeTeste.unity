@@ -466,7 +466,7 @@ MonoBehaviour:
   attackDamage: 1
   attackRange: 3
   attackCooldown: 0.4
-  knockbackForce: 8
+  knockbackForce: 16
 --- !u!1001 &551876911
 PrefabInstance:
   m_ObjectHideFlags: 0

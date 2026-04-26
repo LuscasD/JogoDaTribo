@@ -13,7 +13,6 @@ public class PlayerAttack : MonoBehaviour
     private void Update()
     {
         RotateTowardsMouse();
-
         if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + attackCooldown)
             PerformAttack();
     }
