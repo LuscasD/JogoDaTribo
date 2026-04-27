@@ -26,23 +26,8 @@ public class PlayerAttack : MonoBehaviour
         if (animator != null)
             animator.SetBool(AnimAtacou, false);
 
-        RotateTowardsMouse();
         if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + attackCooldown)
             PerformAttack();
-    }
-
-    private void RotateTowardsMouse()
-    {
-        Plane groundPlane = new Plane(Vector3.up, transform.position);
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (groundPlane.Raycast(ray, out float enter))
-        {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            Vector3 dir = hitPoint - transform.position;
-            dir.y = 0;
-            if (dir.sqrMagnitude > 0.01f)
-                transform.rotation = Quaternion.LookRotation(dir);
-        }
     }
 
     private void PerformAttack()
