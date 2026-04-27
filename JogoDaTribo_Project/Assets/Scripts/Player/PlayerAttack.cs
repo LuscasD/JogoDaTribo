@@ -7,11 +7,13 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackRange = 2f;
     [SerializeField] private float attackCooldown = 0.4f;
     [SerializeField] private float knockbackForce = 5f;
+    [SerializeField] private float movementLockDuration = 0.2f;
 
     [Header("Referências (Opcional)")]
     [SerializeField] private Animator animator;
 
     private float lastAttackTime = -999f;
+    private PlayerMovment movement;
 
     private static readonly int AnimAtacou = Animator.StringToHash("Atacou");
 
@@ -19,6 +21,7 @@ public class PlayerAttack : MonoBehaviour
     {
         if (animator == null)
             animator = GetComponentInChildren<Animator>();
+        movement = GetComponent<PlayerMovment>();
     }
 
     private void Update()
@@ -33,6 +36,8 @@ public class PlayerAttack : MonoBehaviour
     private void PerformAttack()
     {
         lastAttackTime = Time.time;
+
+        movement?.LockMovement(movementLockDuration);
 
         if (animator != null)
             animator.SetBool(AnimAtacou, true);
