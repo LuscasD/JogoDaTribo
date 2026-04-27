@@ -38,15 +38,13 @@ public class PlayerMovment : MonoBehaviour
 
     // Animator hashes
     private static readonly int AnimSpeed = Animator.StringToHash("Speed");
-    private static readonly int AnimMoveX = Animator.StringToHash("MoveX");
-    private static readonly int AnimMoveZ = Animator.StringToHash("MoveZ");
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
 
         if (animator == null)
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
 
         if (topDownCamera == null)
             topDownCamera = Camera.main;
@@ -136,19 +134,12 @@ public class PlayerMovment : MonoBehaviour
         );
     }
 
-    /// Atualiza par�metros do Animator para blend trees.
     private void UpdateAnimator()
     {
         if (animator == null) return;
 
         float speed = new Vector3(currentVelocity.x, 0f, currentVelocity.z).magnitude;
         animator.SetFloat(AnimSpeed, speed);
-
-        if (inputDirection.sqrMagnitude > 0.01f)
-        {
-            animator.SetFloat(AnimMoveX, inputDirection.x);
-            animator.SetFloat(AnimMoveZ, inputDirection.z);
-        }
     }
 
     // -------------------------------------------------------

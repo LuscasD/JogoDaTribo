@@ -8,10 +8,24 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackCooldown = 0.4f;
     [SerializeField] private float knockbackForce = 5f;
 
+    [Header("Referências (Opcional)")]
+    [SerializeField] private Animator animator;
+
     private float lastAttackTime = -999f;
+
+    private static readonly int AnimAtacou = Animator.StringToHash("Atacou");
+
+    private void Awake()
+    {
+        if (animator == null)
+            animator = GetComponentInChildren<Animator>();
+    }
 
     private void Update()
     {
+        if (animator != null)
+            animator.SetBool(AnimAtacou, false);
+
         RotateTowardsMouse();
 
         if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + attackCooldown)
@@ -35,6 +49,9 @@ public class PlayerAttack : MonoBehaviour
     private void PerformAttack()
     {
         lastAttackTime = Time.time;
+
+        if (animator != null)
+            animator.SetBool(AnimAtacou, true);
 
         Vector3 center = transform.position + transform.forward * (attackRange * 0.5f);
         Collider[] hits = Physics.OverlapSphere(center, attackRange * 0.5f);
