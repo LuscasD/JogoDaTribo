@@ -39,8 +39,9 @@ public class Melee : Enemy
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         switch (currentState)
         {
             case State.Idle:      HandleIdle();      break;
@@ -82,6 +83,8 @@ public class Melee : Enemy
 
         yield return RotateUntilAligned(playerTransform, 640f);
 
+        PlayAttackAnimation();
+
         // Dash usando nav.Move — fica na superfície do NavMesh, sem física
         nav.ResetPath();
         Vector3 dashDir = transform.forward;
@@ -102,6 +105,7 @@ public class Melee : Enemy
         }
 
         TryDamagePlayer();
+        StopAttackAnimation();
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
