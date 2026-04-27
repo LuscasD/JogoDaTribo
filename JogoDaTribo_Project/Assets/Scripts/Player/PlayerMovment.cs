@@ -115,6 +115,8 @@ public class PlayerMovment : MonoBehaviour
             lerpFactor * Time.deltaTime
         );
 
+        
+
         // Combina movimento horizontal com gravidade vertical
         Vector3 finalMotion = currentVelocity + Vector3.up * verticalVelocity;
         controller.Move(finalMotion * Time.deltaTime);
@@ -147,10 +149,10 @@ public class PlayerMovment : MonoBehaviour
     // -------------------------------------------------------
 
     /// Aplica um impulso externo no plano horizontal (knockback, explos�o, etc).
-    public void ApplyKnockback(Vector3 force)
+    public void ApplyKnockback(Vector3 direction)
     {
-        currentVelocity += new Vector3(force.x, 0f, force.z);
-        verticalVelocity += force.y;
+        currentVelocity += new Vector3(direction.x, 0f, direction.z);
+        verticalVelocity += 0;
     }
 
    

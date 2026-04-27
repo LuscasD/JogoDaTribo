@@ -15,6 +15,8 @@ public class Melee : Enemy
     [SerializeField] private int attackDamage = 1;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private float stunDuration = 0.4f;
+    [SerializeField] private float knockbackForce = 8f;
+
 
     [SerializeField] private State currentState;
     private bool isAttacking;
@@ -114,7 +116,7 @@ public class Melee : Enemy
         if (playerHealth == null || playerTransform == null) return;
         if (Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 2f)
         {
-            Vector3 knockback = (playerTransform.position - transform.position).normalized * 4f;
+            Vector3 knockback = (playerTransform.position - transform.position).normalized * knockbackForce;
             playerHealth.TakeDamage(attackDamage, knockback);
         }
     }

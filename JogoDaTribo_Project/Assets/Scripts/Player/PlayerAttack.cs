@@ -27,7 +27,6 @@ public class PlayerAttack : MonoBehaviour
             animator.SetBool(AnimAtacou, false);
 
         RotateTowardsMouse();
-
         if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + attackCooldown)
             PerformAttack();
     }
