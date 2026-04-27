@@ -93,7 +93,7 @@ public class Melee : Enemy
         {
             // Para o dash antes de invadir o collider do player
             if (playerTransform != null &&
-                Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 0.9f)
+                Vector3.Distance(transform.position, playerTransform.position) <= 0.9f)
                 break;
 
             nav.Move(dashDir * dashSpeed * Time.deltaTime);
