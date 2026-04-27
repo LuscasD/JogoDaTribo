@@ -77,7 +77,7 @@ MonoBehaviour:
   enableSprint: 1
   acceleration: 10
   deceleration: 12
-  rotateTowardsMovement: 0
+  rotateTowardsMovement: 1
   rotationSpeed: 15
   gravity: -20
   topDownCamera: {fileID: 0}
@@ -121,7 +121,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackDamage: 1
-  attackRange: 3
+  attackRange: 8
   attackCooldown: 0.4
   knockbackForce: 16
   animator: {fileID: 1458413163169634962}
