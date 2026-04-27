@@ -128,6 +128,8 @@ public class Melee : Enemy
 
         StopAllCoroutines();
         isAttacking = false;
+        if (rb != null) { rb.velocity = Vector3.zero; rb.isKinematic = true; }
+        nav.enabled = true;
         nav.ResetPath();
         StartCoroutine(StunRoutine(knockbackDir));
     }
