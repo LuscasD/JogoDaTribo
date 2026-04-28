@@ -196,7 +196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -174
+      value: 41.000015
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -233,6 +233,18 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.data[2]
       value: Battle3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1143823
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.1143823
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 0.9622642
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -274,8 +286,8 @@ Camera:
   m_GameObject: {fileID: 368465650}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.292168, g: 0.39133537, b: 0.5471698, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -405,7 +417,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 215.00002
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -430,6 +442,18 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: nodeType
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.073584795
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 0.8157738
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -510,7 +534,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 215.00002
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -535,6 +559,22 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: nodeType
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: sceneToLoad
+      value: HubUpgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.4070365
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 0.09019607
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -630,7 +670,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -316
+      value: -100.999985
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -653,6 +693,10 @@ PrefabInstance:
       value: Battle1
       objectReference: {fileID: 0}
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: sceneToLoad
+      value: ScenaDeTeste
+      objectReference: {fileID: 0}
+    - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -663,6 +707,18 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.data[1]
       value: Hub1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.11547114
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -947,7 +1003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -174
+      value: 41.000015
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -974,6 +1030,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: sceneToLoad
+      value: HubUpgrade
+      objectReference: {fileID: 0}
+    - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -984,6 +1044,18 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.data[1]
       value: Battle3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.23034836
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.9843137
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 0.14117648
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1069,7 +1141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 215.00002
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1090,6 +1162,18 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: nodeID
       value: Battle3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.1550682
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1170,7 +1254,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -490
+      value: -275
       objectReference: {fileID: 0}
     - target: {fileID: 3035234499577698453, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -1199,6 +1283,22 @@ PrefabInstance:
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.data[0]
       value: Battle1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.1059215
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Color.r
+      value: 0.073584795
+      objectReference: {fileID: 0}
+    - target: {fileID: 8503219152583425249, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: m_Maskable
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

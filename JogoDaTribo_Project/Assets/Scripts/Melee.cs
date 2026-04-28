@@ -30,6 +30,7 @@ public class Melee : Enemy
         nav.speed = speed;
         nav.stoppingDistance = stopDistance;
         currentState = State.Idle;
+        
 
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)

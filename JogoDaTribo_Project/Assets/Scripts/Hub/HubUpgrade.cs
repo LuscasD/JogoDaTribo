@@ -5,16 +5,17 @@ using UnityEngine;
 
 public class HubPrincipal : MonoBehaviour
 {
-    [Header("Interação")]
+    [Header("Interaï¿½ï¿½o")]
     float interactRange = 8f;
     [SerializeField] private int scrapCost = 10; // defina o custo depois
 
-    [Header("Referências")]
+    [Header("Referï¿½ncias")]
     [SerializeField] private TextMeshProUGUI InteractText;
     [SerializeField] private GameObject InteractTextObject; // objeto do texto no mundo
 
     [SerializeField] private TextMeshProUGUI costText;
     [SerializeField] private GameObject costTextObject;
+    [SerializeField] private int vidaDada;
 
 
 
@@ -52,7 +53,7 @@ public class HubPrincipal : MonoBehaviour
 
     private void UpdateText()
     {
-         bool hasScrap = GameManager.Instance.scrap >= scrapCost; // descomente quando tiver a variável
+         bool hasScrap = GameManager.Instance.scrap >= scrapCost; // descomente quando tiver a variï¿½vel
 
 
         costText.text = GameManager.Instance.scrap + "/" + scrapCost;
@@ -67,7 +68,7 @@ public class HubPrincipal : MonoBehaviour
     private void TryInteract()
     {
 
-        //Não tem Scrap suficiente
+        //Nï¿½o tem Scrap suficiente
         if (GameManager.Instance.scrap < scrapCost) return;
 
 
@@ -80,9 +81,9 @@ public class HubPrincipal : MonoBehaviour
 
     void Upgrade()
     {
-        print("Vida Máxima: " + GameManager.Instance.playerHealth);
-        GameManager.Instance.playerHealth += 20; // exemplo de upgrade, aumenta a vida máxima em 20
-        print("Vida Máxima: " + GameManager.Instance.playerHealth);
+        print("Vida Mï¿½xima: " + GameManager.Instance.playerHealth);
+        GameManager.Instance.playerHealth += vidaDada; // exemplo de upgrade, aumenta a vida mï¿½xima em 20
+        print("Vida Mï¿½xima: " + GameManager.Instance.playerHealth);
         scrapCost += 20;
     }
 

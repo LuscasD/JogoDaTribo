@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -17,10 +18,20 @@ public class PlayerHealth : MonoBehaviour
     private float lastDamageTime = -999f;
     private PlayerMovment movement;
 
+    public TextMeshProUGUI  lifeText;
+
     private void Awake()
     {
         movement = GetComponent<PlayerMovment>();
+    }
+
+    private void Start()
+    {
+        if (GameManager.Instance != null)
+            maxHealth = GameManager.Instance.playerHealth;
+
         CurrentHealth = maxHealth;
+        lifeText?.SetText("Vida: " + CurrentHealth);
     }
 
     public void TakeDamage(int damage, Vector3 knockbackDir = default)
@@ -30,6 +41,7 @@ public class PlayerHealth : MonoBehaviour
         lastDamageTime = Time.time;
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
+        lifeText.text = "Vida: "+ CurrentHealth;
 
         if (knockbackDir != Vector3.zero)
             movement?.ApplyKnockback(knockbackDir);

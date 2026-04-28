@@ -1,30 +1,40 @@
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
 
-    public int playerHealth;
-    public int scrap;
-
-
+    public int playerHealth = 3;
+    public int scrap = 0;
+    public TextMeshProUGUI  scrapText;
 
 
 
     private void Awake()
     {
-        // Se já existe uma instância e não é essa, destrói
+        // Se jï¿½ existe uma instï¿½ncia e nï¿½o ï¿½ essa, destrï¿½i
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
 
-        // Define como instância única
+        // Define como instï¿½ncia ï¿½nica
         Instance = this;
+        if(scrapText == null)
+        {
+        scrapText = GameObject.Find("ScrapText")?.GetComponent<TextMeshProUGUI>();
+        }
+        scrapText?.SetText("Scrap: " + scrap);
 
         // Faz o objeto persistir entre cenas
         DontDestroyOnLoad(gameObject);
+    }
+
+   void Update()
+    {
+      scrapText?.SetText("Scrap: " + scrap);  
     }
 
 

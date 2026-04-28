@@ -93,6 +93,7 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
+        GameManager.Instance.scrap += 3;
         OnEnemyDied?.Invoke();
         Destroy(gameObject);
     }
