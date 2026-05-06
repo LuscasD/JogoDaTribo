@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Melee : Enemy
 {
@@ -9,7 +10,8 @@ public class Melee : Enemy
     private PlayerHealth playerHealth;
 
     [Header("Combate")]
-    [SerializeField] private float stopDistance = 1.5f;
+    [SerializeField] private float attackDistance = 6f;
+    [SerializeField] private float hitArea = 3f;
     [SerializeField] private float dashSpeed = 12f;
     [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private int attackDamage = 1;
@@ -28,7 +30,7 @@ public class Melee : Enemy
         base.Start();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = speed;
-        nav.stoppingDistance = stopDistance;
+        //nav.stoppingDistance = vision_radius;
         currentState = State.Idle;
         
 
@@ -62,9 +64,19 @@ public class Melee : Enemy
     {
         if (playerTransform == null || !nav.isOnNavMesh) return;
 
+        float dist = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (dist > desaggroDistance)
+        {
+            nav.ResetPath();
+            nav.velocity = Vector3.zero; // <-- para o deslize
+            currentState = State.Idle;
+            return;
+        }
+
         nav.SetDestination(playerTransform.position);
 
-        if (!nav.pathPending && nav.remainingDistance <= stopDistance)
+        if (!nav.pathPending && nav.remainingDistance <= attackDistance)
         {
             nav.ResetPath();
             currentState = State.Attacking;
@@ -84,6 +96,7 @@ public class Melee : Enemy
 
         yield return RotateUntilAligned(playerTransform, 640f);
 
+        yield return new WaitForSeconds(1f);
         PlayAttackAnimation();
 
         // Dash usando nav.Move — fica na superfície do NavMesh, sem física
@@ -113,13 +126,13 @@ public class Melee : Enemy
 
         if (playerTransform == null) { currentState = State.Idle; yield break; }
         float dist = Vector3.Distance(transform.position, playerTransform.position);
-        currentState = dist > stopDistance * 1.5f ? State.Chasing : State.Attacking;
+        currentState = dist > attackDistance ? State.Chasing : State.Attacking;
     }
 
     private void TryDamagePlayer()
     {
         if (playerHealth == null || playerTransform == null) return;
-        if (Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 2f)
+        if (Vector3.Distance(transform.position, playerTransform.position) <= hitArea * 2f)
         {
             Vector3 knockback = (playerTransform.position - transform.position).normalized * knockbackForce;
             playerHealth.TakeDamage(attackDamage, knockback);
@@ -185,8 +198,13 @@ public class Melee : Enemy
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, vision_radius);
+        Gizmos.DrawWireSphere(transform.position, hitArea);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, stopDistance);
+        Gizmos.DrawWireSphere(transform.position, vision_radius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, attackDistance);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, desaggroDistance);
+
     }
 }

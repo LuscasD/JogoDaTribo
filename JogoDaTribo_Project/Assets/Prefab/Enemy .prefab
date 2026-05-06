@@ -53,8 +53,11 @@ MonoBehaviour:
   MaxLife: 2
   speed: 5
   vision_radius: 10
+  desaggroDistance: 15
+  knockbackDuration: 0.25
   animator: {fileID: 827438671982080200}
-  stopDistance: 1
+  attackDistance: 6
+  hitArea: 3
   dashSpeed: 12
   dashDuration: 0.15
   attackDamage: 1

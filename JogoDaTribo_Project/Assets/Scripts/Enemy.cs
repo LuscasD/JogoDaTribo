@@ -9,7 +9,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] protected Rigidbody rb;
     [SerializeField] protected int MaxLife = 3;
     [SerializeField] protected float speed;
-    [SerializeField] protected float vision_radius;
+    [SerializeField] protected float vision_radius = 10 ;
+    [SerializeField] protected float desaggroDistance = 15;
 
     [Header("Knockback")]
     [SerializeField] private float knockbackDuration = 0.25f;
