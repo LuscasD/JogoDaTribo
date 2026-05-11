@@ -19,6 +19,7 @@ public class ScrapTextScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(GameManager.Instance != null)
         scrapText.SetText("Scrap: " + GameManager.Instance.scrap); 
     }
 }

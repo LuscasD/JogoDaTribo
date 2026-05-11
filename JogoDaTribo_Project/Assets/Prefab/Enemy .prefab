@@ -56,12 +56,12 @@ MonoBehaviour:
   desaggroDistance: 15
   knockbackDuration: 0.25
   animator: {fileID: 827438671982080200}
-  attackDistance: 6
-  hitArea: 3
-  dashSpeed: 12
-  dashDuration: 0.15
+  attackDistance: 5.09
+  hitArea: 1.74
+  dashSpeed: 6
+  dashDuration: 0.3
   attackDamage: 1
-  attackCooldown: 2
+  attackCooldown: 0.8
   stunDuration: 0.4
   knockbackForce: 80
   currentState: 0
@@ -126,7 +126,7 @@ NavMeshAgent:
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 400
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -294,7 +294,7 @@ Animator:
   m_GameObject: {fileID: 144762916287263945}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: cd8dd694645af3842a8d380fbe495c80, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0e4f6c1fbdce21d48a4f5d6c2a428c71, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

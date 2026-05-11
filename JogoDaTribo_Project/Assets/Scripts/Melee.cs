@@ -45,11 +45,14 @@ public class Melee : Enemy
     protected override void Update()
     {
         base.Update();
+        
+        
+
         switch (currentState)
         {
             case State.Idle:      HandleIdle();      break;
-            case State.Chasing:   HandleChasing();   break;
-            case State.Attacking: HandleAttacking(); break;
+            case State.Chasing:   HandleChasing(); ; break;
+            case State.Attacking: HandleAttacking(); ; break;
         }
     }
 
@@ -69,7 +72,7 @@ public class Melee : Enemy
         if (dist > desaggroDistance)
         {
             nav.ResetPath();
-            nav.velocity = Vector3.zero; // <-- para o deslize
+            nav.velocity = Vector3.zero; 
             currentState = State.Idle;
             return;
         }
@@ -85,6 +88,7 @@ public class Melee : Enemy
 
     private void HandleAttacking()
     {
+       
         if (isAttacking) return;
         StartCoroutine(AttackRoutine());
     }
@@ -94,9 +98,9 @@ public class Melee : Enemy
         isAttacking = true;
         if (playerTransform == null || !nav.isOnNavMesh) { isAttacking = false; yield break; }
 
-        yield return RotateUntilAligned(playerTransform, 640f);
+        yield return RotateUntilAligned(playerTransform, 1000f);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.2f);
         PlayAttackAnimation();
 
         // Dash usando nav.Move — fica na superfície do NavMesh, sem física
@@ -132,10 +136,21 @@ public class Melee : Enemy
     private void TryDamagePlayer()
     {
         if (playerHealth == null || playerTransform == null) return;
-        if (Vector3.Distance(transform.position, playerTransform.position) <= hitArea * 2f)
+
+        // Origem da hitbox: à frente do inimigo
+        Vector3 hitOrigin = transform.position + transform.forward * 1.5f;
+
+        Collider[] hits = Physics.OverlapSphere(hitOrigin, hitArea, LayerMask.GetMask("Player"));
+
+        foreach (var hit in hits)
         {
-            Vector3 knockback = (playerTransform.position - transform.position).normalized * knockbackForce;
-            playerHealth.TakeDamage(attackDamage, knockback);
+            var ph = hit.GetComponent<PlayerHealth>();
+            if (ph != null)
+            {
+                Vector3 knockback = (playerTransform.position - transform.position).normalized * knockbackForce;
+                ph.TakeDamage(attackDamage, knockback);
+                break; // evita dano múltiplo
+            }
         }
     }
 
@@ -198,7 +213,7 @@ public class Melee : Enemy
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, hitArea);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 1.5f, hitArea);
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, vision_radius);
         Gizmos.color = Color.blue;
