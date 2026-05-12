@@ -13,6 +13,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Animator animator;
 
     private float lastAttackTime = -999f;
+    private int damageBonus = 0;
     private PlayerMovment movement;
 
     private static readonly int AnimAtacou = Animator.StringToHash("Atacou");
@@ -56,9 +57,14 @@ public class PlayerAttack : MonoBehaviour
             if (enemy != null)
             {
                 Vector3 knockback = (hit.transform.position - transform.position).normalized * knockbackForce;
-                enemy.TakeDamage(attackDamage, knockback);
+                enemy.TakeDamage(attackDamage + damageBonus, knockback);
             }
         }
+    }
+
+    public void SetDamageBonus(int bonus)
+    {
+        damageBonus = bonus;
     }
 
     private void OnDrawGizmos()

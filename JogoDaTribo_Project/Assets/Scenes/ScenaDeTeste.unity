@@ -911,7 +911,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 21.03, y: -14.029999}
+  m_AnchoredPosition: {x: 21.03003, y: -14.030029}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1096933893
@@ -1046,7 +1046,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 23.9, y: -45.93}
+  m_AnchoredPosition: {x: 23.900024, y: -45.929993}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1305157048
@@ -2166,8 +2166,37 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4370027900401781117, guid: 5735ada2ce2f4644e81f919b0d7cfb66, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3103328236060801528}
   m_SourcePrefab: {fileID: 100100000, guid: 5735ada2ce2f4644e81f919b0d7cfb66, type: 3}
+--- !u!1 &3103328236060801526 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4370027900401781117, guid: 5735ada2ce2f4644e81f919b0d7cfb66, type: 3}
+  m_PrefabInstance: {fileID: 3103328236060801525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3103328236060801527 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6288405008921569842, guid: 5735ada2ce2f4644e81f919b0d7cfb66, type: 3}
+  m_PrefabInstance: {fileID: 3103328236060801525}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3103328236060801528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3103328236060801526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6412db1582e877408cc876b2543c563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leftArmParts:
+  - {fileID: 3103328236060801527}
+  - {fileID: 8861438545385980547, guid: 546e3db83bc8cfa48b951b17883e4ea2, type: 3}
+  rightArmParts: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
