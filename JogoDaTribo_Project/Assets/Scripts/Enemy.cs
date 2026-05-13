@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
@@ -17,6 +18,7 @@ public class Enemy : MonoBehaviour
 
     [Header("Referências (Opcional)")]
     [SerializeField] protected Animator animator;
+    [SerializeField] GameObject scrapPrefab;
 
     protected NavMeshAgent navAgent;
     private bool isKnockedBack;
@@ -96,9 +98,8 @@ public class Enemy : MonoBehaviour
 
     protected virtual void Die()
     {
-        if (GameManager.Instance != null)
-        { 
-            GameManager.Instance.scrap += 3;
+        for (int i = 0; i < 3; i++) {
+            var scrp = Instantiate(scrapPrefab, gameObject.transform.position, Quaternion.identity);                
         }
         OnEnemyDied?.Invoke();
         Destroy(gameObject);

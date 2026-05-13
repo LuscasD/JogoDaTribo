@@ -19,22 +19,15 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        // Define como inst�ncia �nica
         Instance = this;
-        if(scrapText == null)
-        {
-        scrapText = GameObject.Find("ScrapText")?.GetComponent<TextMeshProUGUI>();
-        }
-        scrapText?.SetText("Scrap: " + scrap);
-
+     
         // Faz o objeto persistir entre cenas
         DontDestroyOnLoad(gameObject);
     }
 
    void Update()
     {
-      scrapText?.SetText("Scrap: " + scrap);  
+        
     }
 
 
