@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovment : MonoBehaviour
@@ -35,18 +34,18 @@ public class PlayerMovment : MonoBehaviour
     private Vector3 currentVelocity;
     private float verticalVelocity;
     private bool isSprinting;
+    private bool movementLocked;
+    private Coroutine lockCoroutine;
 
     // Animator hashes
     private static readonly int AnimSpeed = Animator.StringToHash("Speed");
-    private static readonly int AnimMoveX = Animator.StringToHash("MoveX");
-    private static readonly int AnimMoveZ = Animator.StringToHash("MoveZ");
 
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
 
         if (animator == null)
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
 
         if (topDownCamera == null)
             topDownCamera = Camera.main;
@@ -64,6 +63,8 @@ public class PlayerMovment : MonoBehaviour
     /// L� o input do jogador e converte para dire��o 3D relativa � c�mera.
     private void ReadInput()
     {
+        if (movementLocked) { inputDirection = Vector3.zero; return; }
+
         float horizontal = Input.GetAxisRaw("Horizontal"); // A/D
         float vertical = Input.GetAxisRaw("Vertical");   // W/S
 
@@ -117,6 +118,8 @@ public class PlayerMovment : MonoBehaviour
             lerpFactor * Time.deltaTime
         );
 
+        
+
         // Combina movimento horizontal com gravidade vertical
         Vector3 finalMotion = currentVelocity + Vector3.up * verticalVelocity;
         controller.Move(finalMotion * Time.deltaTime);
@@ -136,19 +139,12 @@ public class PlayerMovment : MonoBehaviour
         );
     }
 
-    /// Atualiza par�metros do Animator para blend trees.
     private void UpdateAnimator()
     {
         if (animator == null) return;
 
         float speed = new Vector3(currentVelocity.x, 0f, currentVelocity.z).magnitude;
         animator.SetFloat(AnimSpeed, speed);
-
-        if (inputDirection.sqrMagnitude > 0.01f)
-        {
-            animator.SetFloat(AnimMoveX, inputDirection.x);
-            animator.SetFloat(AnimMoveZ, inputDirection.z);
-        }
     }
 
     // -------------------------------------------------------
@@ -156,10 +152,10 @@ public class PlayerMovment : MonoBehaviour
     // -------------------------------------------------------
 
     /// Aplica um impulso externo no plano horizontal (knockback, explos�o, etc).
-    public void ApplyKnockback(Vector3 force)
+    public void ApplyKnockback(Vector3 direction)
     {
-        currentVelocity += new Vector3(force.x, 0f, force.z);
-        verticalVelocity += force.y;
+        currentVelocity += new Vector3(direction.x, 0f, direction.z);
+        verticalVelocity += 0;
     }
 
    
@@ -169,6 +165,22 @@ public class PlayerMovment : MonoBehaviour
         inputDirection = Vector3.zero;
         currentVelocity = Vector3.zero;
         verticalVelocity = 0f;
+    }
+
+    /// Trava o movimento por uma duração — usado pelo ataque para dar sensação de commit.
+    public void LockMovement(float duration)
+    {
+        if (lockCoroutine != null) StopCoroutine(lockCoroutine);
+        lockCoroutine = StartCoroutine(MovementLockRoutine(duration));
+    }
+
+    private IEnumerator MovementLockRoutine(float duration)
+    {
+        movementLocked = true;
+        currentVelocity = Vector3.zero;
+        yield return new WaitForSeconds(duration);
+        movementLocked = false;
+        lockCoroutine = null;
     }
 
     /// Dire��o normalizada do movimento atual.

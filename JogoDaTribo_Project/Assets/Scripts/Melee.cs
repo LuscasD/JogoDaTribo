@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Melee : Enemy
 {
@@ -9,12 +10,15 @@ public class Melee : Enemy
     private PlayerHealth playerHealth;
 
     [Header("Combate")]
-    [SerializeField] private float stopDistance = 1.5f;
+    [SerializeField] private float attackDistance = 6f;
+    [SerializeField] private float hitArea = 3f;
     [SerializeField] private float dashSpeed = 12f;
     [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private int attackDamage = 1;
     [SerializeField] private float attackCooldown = 2f;
     [SerializeField] private float stunDuration = 0.4f;
+    [SerializeField] private float knockbackForce = 8f;
+
 
     [SerializeField] private State currentState;
     private bool isAttacking;
@@ -26,8 +30,9 @@ public class Melee : Enemy
         base.Start();
         nav = GetComponent<NavMeshAgent>();
         nav.speed = speed;
-        nav.stoppingDistance = stopDistance;
+        //nav.stoppingDistance = vision_radius;
         currentState = State.Idle;
+        
 
         var player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
@@ -37,13 +42,17 @@ public class Melee : Enemy
         }
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+        
+        
+
         switch (currentState)
         {
             case State.Idle:      HandleIdle();      break;
-            case State.Chasing:   HandleChasing();   break;
-            case State.Attacking: HandleAttacking(); break;
+            case State.Chasing:   HandleChasing(); ; break;
+            case State.Attacking: HandleAttacking(); ; break;
         }
     }
 
@@ -58,9 +67,19 @@ public class Melee : Enemy
     {
         if (playerTransform == null || !nav.isOnNavMesh) return;
 
+        float dist = Vector3.Distance(transform.position, playerTransform.position);
+
+        if (dist > desaggroDistance)
+        {
+            nav.ResetPath();
+            nav.velocity = Vector3.zero; 
+            currentState = State.Idle;
+            return;
+        }
+
         nav.SetDestination(playerTransform.position);
 
-        if (!nav.pathPending && nav.remainingDistance <= stopDistance)
+        if (!nav.pathPending && nav.remainingDistance <= attackDistance)
         {
             nav.ResetPath();
             currentState = State.Attacking;
@@ -69,6 +88,7 @@ public class Melee : Enemy
 
     private void HandleAttacking()
     {
+       
         if (isAttacking) return;
         StartCoroutine(AttackRoutine());
     }
@@ -78,7 +98,10 @@ public class Melee : Enemy
         isAttacking = true;
         if (playerTransform == null || !nav.isOnNavMesh) { isAttacking = false; yield break; }
 
-        yield return RotateUntilAligned(playerTransform, 640f);
+        yield return RotateUntilAligned(playerTransform, 1000f);
+
+        yield return new WaitForSeconds(0.2f);
+        PlayAttackAnimation();
 
         // Dash usando nav.Move — fica na superfície do NavMesh, sem física
         nav.ResetPath();
@@ -91,7 +114,7 @@ public class Melee : Enemy
         {
             // Para o dash antes de invadir o collider do player
             if (playerTransform != null &&
-                Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 0.9f)
+                Vector3.Distance(transform.position, playerTransform.position) <= 0.9f)
                 break;
 
             nav.Move(dashDir * dashSpeed * Time.deltaTime);
@@ -100,22 +123,34 @@ public class Melee : Enemy
         }
 
         TryDamagePlayer();
+        StopAttackAnimation();
 
         yield return new WaitForSeconds(attackCooldown);
         isAttacking = false;
 
         if (playerTransform == null) { currentState = State.Idle; yield break; }
         float dist = Vector3.Distance(transform.position, playerTransform.position);
-        currentState = dist > stopDistance * 1.5f ? State.Chasing : State.Attacking;
+        currentState = dist > attackDistance ? State.Chasing : State.Attacking;
     }
 
     private void TryDamagePlayer()
     {
         if (playerHealth == null || playerTransform == null) return;
-        if (Vector3.Distance(transform.position, playerTransform.position) <= stopDistance * 2f)
+
+        // Origem da hitbox: à frente do inimigo
+        Vector3 hitOrigin = transform.position + transform.forward * 1.5f;
+
+        Collider[] hits = Physics.OverlapSphere(hitOrigin, hitArea, LayerMask.GetMask("Player"));
+
+        foreach (var hit in hits)
         {
-            Vector3 knockback = (playerTransform.position - transform.position).normalized * 4f;
-            playerHealth.TakeDamage(attackDamage, knockback);
+            var ph = hit.GetComponent<PlayerHealth>();
+            if (ph != null)
+            {
+                Vector3 knockback = (playerTransform.position - transform.position).normalized * knockbackForce;
+                ph.TakeDamage(attackDamage, knockback);
+                break; // evita dano múltiplo
+            }
         }
     }
 
@@ -126,6 +161,8 @@ public class Melee : Enemy
 
         StopAllCoroutines();
         isAttacking = false;
+        if (rb != null) { rb.velocity = Vector3.zero; rb.isKinematic = true; }
+        nav.enabled = true;
         nav.ResetPath();
         StartCoroutine(StunRoutine(knockbackDir));
     }
@@ -176,8 +213,13 @@ public class Melee : Enemy
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, vision_radius);
+        Gizmos.DrawWireSphere(transform.position + transform.forward * 1.5f, hitArea);
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, stopDistance);
+        Gizmos.DrawWireSphere(transform.position, vision_radius);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, attackDistance);
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, desaggroDistance);
+
     }
 }
