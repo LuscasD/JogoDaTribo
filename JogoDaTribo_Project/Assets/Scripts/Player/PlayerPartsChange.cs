@@ -92,6 +92,6 @@ public class PlayerPartsChange : MonoBehaviour
         int bonus = 0;
         if (leftArmParts.Count  > CurrentLeftArm)  bonus += leftArmParts[CurrentLeftArm].damageBonus;
         if (rightArmParts.Count > CurrentRightArm) bonus += rightArmParts[CurrentRightArm].damageBonus;
-        playerAttack?.SetDamageBonus(bonus);
+        //playerAttack?.SetDamageBonus(bonus);
     }
 }

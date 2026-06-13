@@ -26,6 +26,11 @@ public class PlayerMovment : MonoBehaviour
     [Header("Refer�ncias (Opcional)")]
     [SerializeField] private Animator animator;
 
+    [Header("Partes do robô")]
+    [SerializeField]
+    Transform pernas;
+
+
     // Componentes
     private CharacterController controller;
 
@@ -132,8 +137,8 @@ public class PlayerMovment : MonoBehaviour
         if (inputDirection.sqrMagnitude < 0.01f) return;
 
         Quaternion targetRotation = Quaternion.LookRotation(inputDirection, Vector3.up);
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
+        pernas.rotation = Quaternion.Slerp(
+            pernas.rotation,
             targetRotation,
             rotationSpeed * Time.deltaTime
         );
