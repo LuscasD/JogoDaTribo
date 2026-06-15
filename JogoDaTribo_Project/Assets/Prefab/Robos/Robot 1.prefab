@@ -128,7 +128,10 @@ GameObject:
   - component: {fileID: 7723884502373469204}
   - component: {fileID: 3661649913928553600}
   - component: {fileID: 5470987623563598877}
+  - component: {fileID: 8073123723743108803}
   - component: {fileID: 2760897308810012811}
+  - component: {fileID: 3707776197975847141}
+  - component: {fileID: 2215940966521255910}
   m_Layer: 10
   m_Name: Robot 1
   m_TagString: Player
@@ -146,8 +149,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 120.34, y: 13.62, z: 79.77}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6403842552872859152}
   - {fileID: 4098759071383935624}
@@ -235,6 +238,32 @@ MonoBehaviour:
   body: {fileID: 6403842552872859152}
   rotateSpeed: 15
   bodyHeightOffset: 1
+--- !u!114 &8073123723743108803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386486879075035656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db240c78d450a204bbb629765845120f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  body: {fileID: 6594812254982659012}
+  armL: {fileID: 5717665558907663580}
+  armR: {fileID: 6657792688604578897}
+  minAngularSpeed: 30
+  maxAngularSpeed: 360
+  minDamage: 1
+  maxDamage: 5
+  hitCooldownPerEnemy: 0.4
+  knockbackForce: 7
+  sawRadius: 0.64
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  showGizmos: 1
 --- !u!143 &2760897308810012811
 CharacterController:
   m_ObjectHideFlags: 0
@@ -261,6 +290,91 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: -2.35, z: 0}
+--- !u!114 &3707776197975847141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386486879075035656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1494f20cbe47af44dbea82016c341a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  upLegL: {fileID: 8605523297874094322}
+  legConnectorL: {fileID: 7806385985298438769}
+  midLegL: {fileID: 8085854587959061818}
+  footL: {fileID: 2026026442614808596}
+  legMiddleL: {fileID: 5765680773133666931}
+  upLegR: {fileID: 381154812744048015}
+  legConnectorR: {fileID: 5221962901441259890}
+  midLegR: {fileID: 6408124667069554168}
+  footR: {fileID: 4500077503696994318}
+  legMiddleR: {fileID: 6393765403143603821}
+  walkCycleSpeed: 0.3
+  stepHeight: 0.5
+  stepLength: 1
+  rotationAmplitude: 1
+  hipSwingAngle: 20
+  hipLateralAngle: 5
+  kneeFlexAngle: 30
+  kneePhaseOffset: 0.3
+  footPitchAngle: 1
+  keepFootLevel: 1
+  enableIdleAnimation: 1
+  idleSpeed: 1
+  idleAmplitude: 0.5
+  movementThreshold: 0.1
+  showDebugGizmos: 1
+  gizmoColorL: {r: 0, g: 1, b: 0, a: 1}
+  gizmoColorR: {r: 0, g: 1, b: 1, a: 1}
+--- !u!114 &2215940966521255910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386486879075035656}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d8418b0b9634b1892b0268dd9c2743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneShape: 1
+  drawBones: 1
+  drawTripods: 0
+  boneSize: 1
+  tripodSize: 1
+  boneColor: {r: 0, g: 0, b: 1, a: 0.5}
+  m_Transforms:
+  - {fileID: 3912511126428183718}
+  - {fileID: 6403842552872859152}
+  - {fileID: 6594812254982659012}
+  - {fileID: 5717665558907663580}
+  - {fileID: 3047278036021891451}
+  - {fileID: 7842137330299747426}
+  - {fileID: 2239507885289001122}
+  - {fileID: 6657792688604578897}
+  - {fileID: 6608274546513380123}
+  - {fileID: 6623940049927385165}
+  - {fileID: 4977305334232372707}
+  - {fileID: 5684927553026944079}
+  - {fileID: 4098759071383935624}
+  - {fileID: 3422894290507810586}
+  - {fileID: 6177343984412630693}
+  - {fileID: 8605523297874094322}
+  - {fileID: 7806385985298438769}
+  - {fileID: 8085854587959061818}
+  - {fileID: 2026026442614808596}
+  - {fileID: 843692030189895180}
+  - {fileID: 5765680773133666931}
+  - {fileID: 381154812744048015}
+  - {fileID: 5221962901441259890}
+  - {fileID: 6408124667069554168}
+  - {fileID: 4500077503696994318}
+  - {fileID: 8678399209778718570}
+  - {fileID: 6393765403143603821}
 --- !u!1 &964767774474435392
 GameObject:
   m_ObjectHideFlags: 0
