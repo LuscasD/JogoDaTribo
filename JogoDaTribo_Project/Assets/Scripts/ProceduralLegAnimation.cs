@@ -181,8 +181,7 @@ public class ProceduralLegAnimation : MonoBehaviour
         );
     }
 
-    // ═══════════════════════════════════════════════════════════════════════
-    /// <summary>Anima todos os bones de uma perna baseado na fase do ciclo.</summary>
+
     void AnimateLeg(
         float phase,
         Transform upLeg, Transform legConn, Transform midLeg, Transform foot, Transform legMiddle,
