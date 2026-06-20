@@ -127,7 +127,6 @@ GameObject:
   - component: {fileID: 6263034737280701717}
   - component: {fileID: 3661649913928553600}
   - component: {fileID: 5470987623563598877}
-  - component: {fileID: 8073123723743108803}
   - component: {fileID: 3707776197975847141}
   - component: {fileID: 7723884502373469204}
   - component: {fileID: 2760897308810012811}
@@ -217,32 +216,6 @@ MonoBehaviour:
   bodyHeightOffset: 1
   rotationFreezeOnHit: 0.15
   hitBumpSpeed: 60
---- !u!114 &8073123723743108803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 386486879075035656}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db240c78d450a204bbb629765845120f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  body: {fileID: 6594812254982659012}
-  armL: {fileID: 5717665558907663580}
-  armR: {fileID: 6657792688604578897}
-  minAngularSpeed: 30
-  maxAngularSpeed: 360
-  minDamage: 1
-  maxDamage: 5
-  hitCooldownPerEnemy: 0.4
-  knockbackForce: 7
-  sawRadius: 0.64
-  enemyLayer:
-    serializedVersion: 2
-    m_Bits: 4096
-  showGizmos: 1
 --- !u!114 &3707776197975847141
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,6 +357,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6657792688604578897}
+  - component: {fileID: 3431004321280133676}
   m_Layer: 10
   m_Name: Arm.R
   m_TagString: Untagged
@@ -408,6 +382,30 @@ Transform:
   - {fileID: 6623940049927385165}
   m_Father: {fileID: 6594812254982659012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3431004321280133676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964767774474435392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35919ac29813fa24891ea8745b6ac47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAngularSpeed: 30
+  maxAngularSpeed: 360
+  minDamage: 1
+  maxDamage: 5
+  hitCooldownPerEnemy: 0.4
+  knockbackForce: 7
+  tip: {fileID: 4977305334232372707}
+  sawRadius: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  showGizmos: 1
 --- !u!1 &1198501652163657853
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,7 +614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2239507885289001122}
   - component: {fileID: 7637618882934689260}
-  - component: {fileID: 4805013846251621653}
+  - component: {fileID: 755835018835095390}
   m_Layer: 10
   m_Name: Chainsaw_Aug.003
   m_TagString: Untagged
@@ -647,7 +645,7 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824748115919926885}
   m_Mesh: {fileID: -9158068160182662238, guid: 92307d249f4a0d14cb6b04c88e4a365b, type: 3}
---- !u!23 &4805013846251621653
+--- !u!23 &755835018835095390
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -667,7 +665,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 17b9e5553b029bd47986338aa1eaf1bb, type: 2}
+  - {fileID: 2100000, guid: b7946ff35a3b217439eaa25be20c05a3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -796,6 +794,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 552098832781110896}
+  - component: {fileID: 8760381536194734070}
   m_Layer: 10
   m_Name: ArmGun.R
   m_TagString: Untagged
@@ -820,6 +819,31 @@ Transform:
   - {fileID: 2078482150136197949}
   m_Father: {fileID: 6594812254982659012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8760381536194734070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2833194631768408823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac948ec6e3c043242ba0a8ef462b8149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projetil: {fileID: 1234451212944668897, guid: feba3a4c63746a0478e0ec5c4bf91abb, type: 3}
+  muzzle: {fileID: 8634482527784532816}
+  damage: 3
+  bulletSpeed: 30
+  knockbackForce: 4
+  fireRate: 6
+  fullAuto: 0
+  projectileLife: 3
+  mouseButton: 0
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  mirarPeloCano: 1
 --- !u!1 &3035276191885257069
 GameObject:
   m_ObjectHideFlags: 0
@@ -1271,89 +1295,6 @@ Transform:
   - {fileID: 5684927553026944079}
   m_Father: {fileID: 6403842552872859152}
   m_LocalEulerAnglesHint: {x: 87.344, y: 0, z: 0}
---- !u!1 &4297138889345293941
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4977305334232372707}
-  - component: {fileID: 1015141932275820404}
-  - component: {fileID: 3396185036702242950}
-  m_Layer: 10
-  m_Name: Chainsaw_Aug
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4977305334232372707
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4297138889345293941}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.0000000033881546, y: -0.000000010523429, z: 0.0030053777, w: 0.99999547}
-  m_LocalPosition: {x: 0, y: -0.0000007748604, z: -0.000028967857}
-  m_LocalScale: {x: 1, y: 0.99999994, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6623940049927385165}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &1015141932275820404
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4297138889345293941}
-  m_Mesh: {fileID: -3409095529830047346, guid: 92307d249f4a0d14cb6b04c88e4a365b, type: 3}
---- !u!23 &3396185036702242950
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4297138889345293941}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 17b9e5553b029bd47986338aa1eaf1bb, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &4338054869598341925
 GameObject:
   m_ObjectHideFlags: 0
@@ -1594,6 +1535,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5717665558907663580}
+  - component: {fileID: 9029735821391367825}
   m_Layer: 10
   m_Name: Arm.L
   m_TagString: Untagged
@@ -1618,6 +1560,30 @@ Transform:
   - {fileID: 7842137330299747426}
   m_Father: {fileID: 6594812254982659012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9029735821391367825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4713234845415404723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35919ac29813fa24891ea8745b6ac47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minAngularSpeed: 30
+  maxAngularSpeed: 360
+  minDamage: 1
+  maxDamage: 5
+  hitCooldownPerEnemy: 0.4
+  knockbackForce: 7
+  tip: {fileID: 2239507885289001122}
+  sawRadius: 0.5
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  showGizmos: 1
 --- !u!1 &5992303953052245309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1872,6 +1838,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8770348944625510003}
+  - component: {fileID: 8027372889448739566}
   m_Layer: 10
   m_Name: ArmGun.L
   m_TagString: Untagged
@@ -1896,6 +1863,31 @@ Transform:
   - {fileID: 3828076182423429867}
   m_Father: {fileID: 6594812254982659012}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8027372889448739566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8660276626406862187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac948ec6e3c043242ba0a8ef462b8149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projetil: {fileID: 1234451212944668897, guid: feba3a4c63746a0478e0ec5c4bf91abb, type: 3}
+  muzzle: {fileID: 7924768732126662547}
+  damage: 3
+  bulletSpeed: 30
+  knockbackForce: 4
+  fireRate: 6
+  fullAuto: 0
+  projectileLife: 3
+  mouseButton: 0
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  mirarPeloCano: 1
 --- !u!1 &9008389400493901541
 GameObject:
   m_ObjectHideFlags: 0
@@ -2123,6 +2115,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1597547821368194041, guid: 26c08a2e91ee0064794b257a47889f9c, type: 3}
   m_PrefabInstance: {fileID: 692750304097043891}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &8634482527784532816 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9101489694345428707, guid: 26c08a2e91ee0064794b257a47889f9c, type: 3}
+  m_PrefabInstance: {fileID: 692750304097043891}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1419922007937397104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2241,4 +2238,71 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 1597547821368194041, guid: 26c08a2e91ee0064794b257a47889f9c, type: 3}
   m_PrefabInstance: {fileID: 1419922007937397104}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7924768732126662547 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9101489694345428707, guid: 26c08a2e91ee0064794b257a47889f9c, type: 3}
+  m_PrefabInstance: {fileID: 1419922007937397104}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7711979284475803266
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6623940049927385165}
+    m_Modifications:
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0000007748604
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.000028967857
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.99999547
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0000000033881546
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.000000010523429
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0030053777
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5811039082488834295, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_Name
+      value: Chainsaw_Aug
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+--- !u!4 &4977305334232372707 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+  m_PrefabInstance: {fileID: 7711979284475803266}
   m_PrefabAsset: {fileID: 0}

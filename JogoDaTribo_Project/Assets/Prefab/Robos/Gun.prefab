@@ -31,7 +31,8 @@ Transform:
   m_LocalPosition: {x: 0.681, y: 0.007, z: -0}
   m_LocalScale: {x: 0.35612902, y: 0.2235341, z: 0.35612902}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 9101489694345428707}
   m_Father: {fileID: 1597547821368194041}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!33 &6078453922142069403
@@ -107,6 +108,37 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!1 &2920972087972853750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9101489694345428707}
+  m_Layer: 10
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 7148428337604731935, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9101489694345428707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2920972087972853750}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -1.09, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 959082770620128365}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3507961340906594753
 GameObject:
   m_ObjectHideFlags: 0
@@ -119,6 +151,7 @@ GameObject:
   - component: {fileID: 1912170027760068078}
   - component: {fileID: 5033322964203568701}
   - component: {fileID: 8119228811342334253}
+  - component: {fileID: 421158081936217908}
   m_Layer: 10
   m_Name: Gun
   m_TagString: Untagged
@@ -213,3 +246,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &421158081936217908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3507961340906594753}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac948ec6e3c043242ba0a8ef462b8149, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projetil: {fileID: 0}
+  muzzle: {fileID: 9101489694345428707}
+  damage: 3
+  bulletSpeed: 30
+  knockbackForce: 4
+  fireRate: 6
+  fullAuto: 0
+  projectileLife: 3
+  mouseButton: 0
+  hitMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  torso: {fileID: 0}
+  mirarPeloCano: 0
