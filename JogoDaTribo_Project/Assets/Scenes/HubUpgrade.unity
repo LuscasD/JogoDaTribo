@@ -5007,7 +5007,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e243d42ed6790f14292bf3f915c1356e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lado: 0
+  lado: 1
   interactRange: 3
   interactTextObject: {fileID: 637437933}
   interactText: {fileID: 637437934}
@@ -5651,7 +5651,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
