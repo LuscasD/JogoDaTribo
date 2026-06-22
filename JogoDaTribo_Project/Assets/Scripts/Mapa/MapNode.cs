@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class MapNode : MonoBehaviour
 {
-    protected enum MapNodeTypes
+    public enum MapNodeTypes
     {
         Battle,
         ScrapBattle,
@@ -26,14 +26,46 @@ public class MapNode : MonoBehaviour
     private MapNode currentMapNode;
     private List<MapNode> connectedNodes;
 
+    bool alreadyCleared;
+    bool isReachable;
+
     void Awake()
     {
+        
+    }
+
+     void Start()
+    {   
         mapManager = MapManager.Instance;
+        
+        if(GetComponent<Button>() == null) gameObject.AddComponent<Button>();
+        if(GetComponent<Image>() == null) gameObject.AddComponent<Image>();
+        if(GetComponent<LineRenderer>() == null) gameObject.AddComponent<LineRenderer>();
+
         button = GetComponent<Button>();
         button.onClick.AddListener(OnClick);
         nodeIcon = GetComponent<Image>();
         lineRenderer = GetComponent<LineRenderer>();
 
+
+        if (mapManager.GetCurrentMapNodeID() == nodeID)
+        {
+            mapManager.SetCurrentMapNode(this);
+            lineRenderer.startColor = Color.white;
+            lineRenderer.endColor = Color.white;
+        } else
+        {
+            lineRenderer.startColor = Color.gray;
+            lineRenderer.endColor = Color.gray;
+        }
+        
+
+        mapManager.AddNodeToList(this); 
+
+        if (transform.localScale != Vector3.one)
+        {
+            transform.localScale = Vector3.one;
+        }
         //seleção da sprite
         switch (nodeType)
         {
@@ -57,24 +89,12 @@ public class MapNode : MonoBehaviour
                 break;
         }
 
-
-        if (mapManager.GetCurrentMapNodeID() == nodeID)
-        {
-            mapManager.SetCurrentMapNode(this);
-            lineRenderer.startColor = Color.white;
-            lineRenderer.endColor = Color.white;
-        } else
-        {
-            lineRenderer.startColor = Color.gray;
-            lineRenderer.endColor = Color.gray;
-        }
         
+        //else button.interactable = true;
         
-
-        mapManager.AddNodeToList(this);
     }
 
-    void Start()
+    void Update()
     {
         currentMapNode = mapManager.GetCurrentMapNode();
 
@@ -85,15 +105,14 @@ public class MapNode : MonoBehaviour
         }
 
         //desativar botões inacessíveis
-        bool alreadyCleared = mapManager.GetClearedNodes().Contains(nodeID);
-        bool isReachable    = currentMapNode.connectedIDs.Contains(nodeID);
+        alreadyCleared = mapManager.GetClearedNodes().Contains(nodeID);
+        isReachable    = mapManager.IsReachable(nodeID);//currentMapNode.connectedIDs.Contains(nodeID);
 
         if(nodeType == MapNodeTypes.Start && !alreadyCleared)
             mapManager.AddClearedNode(nodeID);
 
         if (alreadyCleared || !isReachable)
             button.interactable = false;
-
 
         //criar linhas e trocar sprite de node terminado
         int index = 0;
@@ -114,21 +133,20 @@ public class MapNode : MonoBehaviour
                     lineRenderer.endColor = Color.yellow;
                     return;
                 }
-
             }
         }
         //criar resto das linhas
         connectedNodes = mapManager.GetConnectedNodes(this);
         lineRenderer.positionCount = connectedNodes.Count * 2;
         if (connectedNodes.Count > 0)
+        {
             foreach (var node in connectedNodes)
             {
                 lineRenderer.SetPosition(index, node.transform.position);
                 lineRenderer.SetPosition(index + 1, transform.position);
                 index = index + 2;
             }
-
-        
+        }
     }
 
     void OnClick()
@@ -155,6 +173,24 @@ public class MapNode : MonoBehaviour
         }*/
     }
 
+    public void SetMapNodeType(MapNodeTypes nodeType)
+    {
+        this.nodeType = nodeType;
+    }
+    public void SetID(string nodeID)
+    {
+        this.nodeID = nodeID;
+    }
+    public void AddConnectedID(string nodeID)
+    {
+        connectedIDs.Add(nodeID);
+    }
+    public void SetConnectedIDs(List<string> connectedIDs)
+    {
+        this.connectedIDs = connectedIDs;
+    }
+
     public string GetID() => nodeID;
     public List<string> GetConnectedIDs() => connectedIDs;
+    public MapNodeTypes GetNodeType() => nodeType;
 }

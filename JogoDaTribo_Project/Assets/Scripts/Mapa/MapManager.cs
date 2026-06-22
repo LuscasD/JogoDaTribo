@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -23,19 +21,41 @@ public class MapManager : MonoBehaviour
 
 	private MapNode currentMapNode;
 	private string currentMapNodeID;
-	private List<string> clearedNodes;
-	private List<MapNode> nodeList;
+	private List<string> clearedNodes = new List<string>();
+	private List<MapNode> nodeList = new List<MapNode>();
 
+	static MapNode baseMapNode = Resources.Load<MapNode>("MapNode");
+
+	private List<List<(int,int)>> path;
+	private List<List<MapNode>> grid;
+	private List<MapNodeSave> savedNodes = new List<MapNodeSave>();
 
     private void Awake()
     {
-        clearedNodes = new List<string>();
-		nodeList = new List<MapNode>();
 		currentMapNodeID = "Start";
+		path = MapGenerator.GeneratePaths();
+		grid = MapGenerator.GenerateBaseGrid();
+		MapGenerator.GenerateMapNodes(path, grid);
+		MapGenerator.PositionMapNodes(path, grid);
+		SaveNodes(grid);
     }
 
+    private void Start()
+    {
+		Debug.Log(grid);
+		SceneManager.sceneLoaded += OnSceneLoaded;
+    }
 
-	public MapNode GetCurrentMapNode()
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		if(scene.name == "WorldMap")
+		{
+			SpawnNodes();
+		}
+	}
+
+
+    public MapNode GetCurrentMapNode()
 	{
 		return currentMapNode;
 	}
@@ -55,6 +75,11 @@ public class MapManager : MonoBehaviour
 		currentMapNodeID = ID;
 	}
 
+	public bool IsReachable(string ID)
+	{
+		return currentMapNode.GetConnectedIDs().Contains(ID);
+	}
+
 	public List<string> GetClearedNodes()
 	{
 		return clearedNodes;
@@ -65,6 +90,16 @@ public class MapManager : MonoBehaviour
 		clearedNodes.Add(nodeID);
 	}
 	
+	public List<List<(int,int)>> GetPaths()
+	{
+		return path;
+	}
+
+	public List<List<MapNode>> GetGrid()
+	{
+		return grid;
+	}
+
 
 	public void AddNodeToList(MapNode node)
 	{
@@ -94,6 +129,47 @@ public class MapManager : MonoBehaviour
 		}
 		
 		return connectedNodes;
+	}
+
+
+ 	private void SaveNodes(List<List<MapNode>> grid)
+	{
+		List<MapNode> listToSave = new List<MapNode>();
+		foreach (var row in grid)
+		{
+			listToSave.AddRange(row.FindAll(
+				delegate(MapNode node)
+                {
+                    return node != null;
+                }
+			));
+		}
+		foreach (var node in listToSave)
+		{
+			MapNodeSave savedNode = new MapNodeSave();
+			savedNode.SaveNode(node);
+			savedNodes.Add(savedNode);
+		}
+	}
+
+	public void SpawnNodes()
+	{
+		MapNode baseMapNode = Resources.Load<MapNode>("MapNode");
+		GameObject panel = GameObject.Find("Panel");
+		foreach (var savedNode in savedNodes)
+		{
+			MapNode node = Instantiate(baseMapNode);
+			node.transform.SetParent(panel.transform);
+			node.SetMapNodeType(savedNode.GetNodeType());
+			node.SetID(savedNode.GetID());
+			node.SetConnectedIDs(savedNode.GetConnectedIDs());
+			node.transform.localPosition = savedNode.GetPosition();
+		}
+	}
+
+	public List<MapNodeSave> GetSavedNodes()
+	{
+		return savedNodes;
 	}
 
 
