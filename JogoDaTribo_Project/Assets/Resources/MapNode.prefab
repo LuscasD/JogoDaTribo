@@ -148,7 +148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nodeType: 0
   nodeID: 
-  sceneToLoad: ScenaDeTeste
+  sceneToLoad: Fase1
   connectedIDs: []
 --- !u!120 &3125268374602326487
 LineRenderer:
@@ -190,7 +190,7 @@ LineRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 75155539
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}

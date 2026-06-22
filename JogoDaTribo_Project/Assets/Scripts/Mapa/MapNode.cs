@@ -16,7 +16,7 @@ public class MapNode : MonoBehaviour
 
     [SerializeField] protected MapNodeTypes nodeType;
     [SerializeField] protected string nodeID;
-    [SerializeField] protected string sceneToLoad = "ScenaDeTeste";
+    [SerializeField] protected string sceneToLoad = "Fase1";
     [SerializeField] protected List<string> connectedIDs = new List<string>();
 
     private MapManager mapManager;
