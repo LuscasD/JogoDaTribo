@@ -3,6 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Estação de troca de UM lado (esquerdo OU direito). NÃO guarda mais os braços
+/// nem o que está equipado — ela só mostra a lista do jogador (PlayerArmLoadout)
+/// e manda equipar. A escolha é lembrada pelo PlayerArmLoadout entre as cenas.
+/// </summary>
 public class PartSwapStation : MonoBehaviour
 {
     public enum ArmSide { Esquerdo, Direito }
@@ -21,13 +26,13 @@ public class PartSwapStation : MonoBehaviour
     [SerializeField] private Transform containerBotoes;
     [SerializeField] private GameObject botaoTemplate;
 
-    private static readonly Color CorEquipado   = new Color(0.20f, 0.75f, 0.20f, 1f);
+    private static readonly Color CorEquipado = new Color(0.20f, 0.75f, 0.20f, 1f);
     private static readonly Color CorSelecionado = new Color(0.95f, 0.75f, 0.10f, 1f);
-    private static readonly Color CorDisponivel  = new Color(0.90f, 0.90f, 0.90f, 1f);
-    private static readonly Color CorBloqueado   = new Color(0.35f, 0.35f, 0.35f, 1f);
+    private static readonly Color CorDisponivel = new Color(0.90f, 0.90f, 0.90f, 1f);
+    private static readonly Color CorBloqueado = new Color(0.35f, 0.35f, 0.35f, 1f);
 
     private PlayerMovment player;
-    private PlayerPartsChange playerParts;
+    private PlayerArmLoadout loadout;
 
     private bool painelAberto;
     private int indexSelecionado;
@@ -35,8 +40,8 @@ public class PartSwapStation : MonoBehaviour
 
     private void Start()
     {
-        player      = FindObjectOfType<PlayerMovment>();
-        playerParts = player?.GetComponent<PlayerPartsChange>();
+        player = FindObjectOfType<PlayerMovment>();
+        loadout = player != null ? player.GetComponent<PlayerArmLoadout>() : FindObjectOfType<PlayerArmLoadout>();
 
         painelSelecao.SetActive(false);
         interactTextObject.SetActive(false);
@@ -44,17 +49,13 @@ public class PartSwapStation : MonoBehaviour
 
     private void Update()
     {
-        if (player == null) return;
+        if (player == null || loadout == null) return;
 
         bool noRange = Vector3.Distance(transform.position, player.transform.position) <= interactRange;
 
         if (painelAberto)
         {
-            if (!noRange)
-            {
-                FecharPainel();
-                return;
-            }
+            if (!noRange) { FecharPainel(); return; }
 
             HandleNavegacao();
 
@@ -72,47 +73,54 @@ public class PartSwapStation : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (painelAberto)
+        {
+            painelAberto = false;
+            GunArm.BloqueiosTiro = Mathf.Max(0, GunArm.BloqueiosTiro - 1);
+        }
+    }
+
     // -------------------------------------------------------
+
+    private List<PlayerArmLoadout.Braco> Lista =>
+        lado == ArmSide.Esquerdo ? loadout.esquerdo : loadout.direito;
+
+    private int IndexEquipado =>
+        lado == ArmSide.Esquerdo ? loadout.IndexEsquerdo : loadout.IndexDireito;
 
     private void AbrirPainel()
     {
         painelAberto = true;
+        GunArm.BloqueiosTiro++;
         interactTextObject.SetActive(false);
         painelSelecao.SetActive(true);
         tituloPainel.text = $"Braço {lado}";
 
-        indexSelecionado = lado == ArmSide.Esquerdo
-            ? playerParts.CurrentLeftArm
-            : playerParts.CurrentRightArm;
-
+        indexSelecionado = IndexEquipado;
         PopularBotoes();
     }
 
     private void FecharPainel()
     {
         painelAberto = false;
+        GunArm.BloqueiosTiro = Mathf.Max(0, GunArm.BloqueiosTiro - 1);
         painelSelecao.SetActive(false);
         LimparBotoes();
     }
 
     private void HandleNavegacao()
     {
-        var partes = lado == ArmSide.Esquerdo ? playerParts.leftArmParts : playerParts.rightArmParts;
+        var lista = Lista;
+        if (lista.Count == 0) return;
 
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            int next = (indexSelecionado + 1) % partes.Count;
-            SetSelecionado(next);
-        }
+            SetSelecionado((indexSelecionado + 1) % lista.Count);
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            int prev = (indexSelecionado - 1 + partes.Count) % partes.Count;
-            SetSelecionado(prev);
-        }
+            SetSelecionado((indexSelecionado - 1 + lista.Count) % lista.Count);
         else if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
-        {
             EquiparSelecionado();
-        }
     }
 
     private void SetSelecionado(int index)
@@ -123,49 +131,51 @@ public class PartSwapStation : MonoBehaviour
 
     private void EquiparSelecionado()
     {
-        var partes = lado == ArmSide.Esquerdo ? playerParts.leftArmParts : playerParts.rightArmParts;
-        if (!partes[indexSelecionado].isUnlocked) return;
+        if (!Lista[indexSelecionado].desbloqueado) return;
 
-        if (lado == ArmSide.Esquerdo) playerParts.EquipLeftArm(indexSelecionado);
-        else                          playerParts.EquipRightArm(indexSelecionado);
+        if (lado == ArmSide.Esquerdo) loadout.EquiparEsquerdo(indexSelecionado);
+        else loadout.EquiparDireito(indexSelecionado);
 
         AtualizarCoresBotoes();
     }
 
     // -------------------------------------------------------
 
+    private string Descricao(PlayerArmLoadout.Braco b)
+    {
+        if (b.objeto == null) return "";
+        if (b.objeto.GetComponentInChildren<SawArm>(true) != null) return "Serra";
+        if (b.objeto.GetComponentInChildren<GunArm>(true) != null) return "Arma";
+        return "";
+    }
+
     private void PopularBotoes()
     {
         LimparBotoes();
 
-        var partes = lado == ArmSide.Esquerdo ? playerParts.leftArmParts : playerParts.rightArmParts;
-
-        for (int i = 0; i < partes.Count; i++)
+        var lista = Lista;
+        for (int i = 0; i < lista.Count; i++)
         {
-            var parte = partes[i];
-            int idx   = i;
+            var braco = lista[i];
+            int idx = i;
 
             GameObject obj = Instantiate(botaoTemplate, containerBotoes);
             obj.SetActive(true);
 
             var textos = obj.GetComponentsInChildren<TextMeshProUGUI>(true);
             if (textos.Length > 0)
-                textos[0].text = parte.isUnlocked ? parte.partName : "???";
+                textos[0].text = braco.desbloqueado ? braco.nome : "???";
             if (textos.Length > 1)
-                textos[1].text = parte.isUnlocked ? $"+{parte.damageBonus} Dano" : "<color=#888>Bloqueado</color>";
+                textos[1].text = braco.desbloqueado ? Descricao(braco) : "<color=#888>Bloqueado</color>";
 
             var tagEquipado = obj.transform.Find("TagEquipado");
-            if (tagEquipado != null)
-                tagEquipado.gameObject.SetActive(false);
+            if (tagEquipado != null) tagEquipado.gameObject.SetActive(false);
 
             var button = obj.GetComponent<Button>();
             if (button != null)
             {
-                button.interactable = parte.isUnlocked;
-                button.onClick.AddListener(() => {
-                    indexSelecionado = idx;
-                    EquiparSelecionado();
-                });
+                button.interactable = braco.desbloqueado;
+                button.onClick.AddListener(() => { indexSelecionado = idx; EquiparSelecionado(); });
             }
 
             botoesInstanciados.Add(obj);
@@ -176,24 +186,23 @@ public class PartSwapStation : MonoBehaviour
 
     private void AtualizarCoresBotoes()
     {
-        var partes   = lado == ArmSide.Esquerdo ? playerParts.leftArmParts  : playerParts.rightArmParts;
-        int equipado = lado == ArmSide.Esquerdo ? playerParts.CurrentLeftArm : playerParts.CurrentRightArm;
+        var lista = Lista;
+        int equipado = IndexEquipado;
 
         for (int i = 0; i < botoesInstanciados.Count; i++)
         {
-            var obj  = botoesInstanciados[i];
-            var img  = obj.GetComponent<Image>();
-            var part = partes[i];
+            var obj = botoesInstanciados[i];
+            var img = obj.GetComponent<Image>();
+            var braco = lista[i];
 
             if (img != null)
                 img.color = i == indexSelecionado ? CorSelecionado
-                          : i == equipado         ? CorEquipado
-                          : part.isUnlocked       ? CorDisponivel
-                          :                         CorBloqueado;
+                          : i == equipado ? CorEquipado
+                          : braco.desbloqueado ? CorDisponivel
+                          : CorBloqueado;
 
             var tagEquipado = obj.transform.Find("TagEquipado");
-            if (tagEquipado != null)
-                tagEquipado.gameObject.SetActive(i == equipado);
+            if (tagEquipado != null) tagEquipado.gameObject.SetActive(i == equipado);
         }
     }
 

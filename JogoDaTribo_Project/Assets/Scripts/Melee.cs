@@ -15,14 +15,21 @@ public class Melee : Enemy
     [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private int attackDamage = 1;
     [SerializeField] private float attackCooldown = 2f;
-    [SerializeField] private float stunDuration = 0.4f;
-    [SerializeField] private float knockbackForce = 8f;
-    [SerializeField] private float knockbackDuration = 0.25f; // tempo voando após knockback
 
-    // 👇 NOVO: Referência para o Prefab do seu VFX de faísca
+    [Header("Knockback")]
+    [Tooltip("Velocidade mínima de recuo (m/s), usada como piso.")]
+    [SerializeField] private float knockbackForce = 10f;
+    [Tooltip("Multiplica a força de knockback que vem da arma. Aumente para empurrar mais longe.")]
+    [SerializeField] private float knockbackMultiplier = 2.5f;
+    [Tooltip("Tempo voando após o impacto.")]
+    [SerializeField] private float knockbackDuration = 0.3f;
+    [Tooltip("Leve arco pra cima (0 = puramente horizontal).")]
+    [SerializeField] private float upwardBias = 0.15f;
+    [SerializeField] private float stunDuration = 0.4f;
+
     [Header("Efeitos Visuais")]
     [SerializeField] private ParticleSystem hitVfxPrefab;
-    [SerializeField] private float vfxHeightOffset = 1f; // Ajuste a altura da faísca no corpo do inimigo
+    [SerializeField] private float vfxHeightOffset = 1f;
 
     private State currentState;
     private bool isAttacking;
@@ -50,7 +57,6 @@ public class Melee : Enemy
     {
         base.Update();
 
-        // Nada roda enquanto knockback físico está ativo
         if (isKnockedBack) return;
 
         switch (currentState)
@@ -109,13 +115,11 @@ public class Melee : Enemy
             yield break;
         }
 
-        // Gira até alinhar com o player
         yield return RotateUntilAligned(playerTransform, 1000f);
         yield return new WaitForSeconds(0.2f);
 
         PlayAttackAnimation();
 
-        // Dash via nav.Move — fica no NavMesh, sem conflito com Rigidbody
         nav.ResetPath();
         Vector3 dashDir = transform.forward;
         dashDir.y = 0f;
@@ -163,42 +167,40 @@ public class Melee : Enemy
         }
     }
 
-    // ── TakeDamage com knockback corrigido e VFX ─────────────────────────
+    // ── TakeDamage: faísca SEMPRE + knockback forte ──────────────────────
     public override void TakeDamage(int damage, Vector3 knockbackDir = default)
     {
         base.TakeDamage(damage, knockbackDir);
 
-        // 👇 NOVO: Instancia e toca o efeito visual de impacto
-        if (hitVfxPrefab != null)
-        {
-            // Posição: Pega a posição do inimigo e sobe um pouco para não ficar no pé
-            Vector3 spawnPosition = transform.position + (Vector3.up * vfxHeightOffset);
+        SpawnHitVfx(); // toca a faísca em TODO hit, vivo ou morto
 
-            // Instancia o VFX
-            ParticleSystem vfxInstance = Instantiate(hitVfxPrefab, spawnPosition, Quaternion.identity);
-
-            // Toca a partícula
-            vfxInstance.Play();
-
-            // Destrói o GameObject da partícula após ela terminar de tocar para não pesar a memória
-            float destroyDelay = vfxInstance.main.duration + vfxInstance.main.startLifetime.constantMax;
-            Destroy(vfxInstance.gameObject, destroyDelay);
-        }
-
-        if (life <= 0) return;
+        if (life <= 0) return; // morreu: não roda knockback/stun
 
         StopAllCoroutines();
         isAttacking = false;
-
         StartCoroutine(KnockbackRoutine(knockbackDir));
     }
 
-    private IEnumerator KnockbackRoutine(Vector3 knockbackDir)
+    private void SpawnHitVfx()
+    {
+        if (hitVfxPrefab == null) return;
+
+        Vector3 pos = transform.position + Vector3.up * vfxHeightOffset;
+        ParticleSystem vfx = Instantiate(hitVfxPrefab, pos, Quaternion.identity);
+        vfx.Play();
+
+        var main = vfx.main;
+        float vida = main.duration + main.startLifetime.constantMax;
+        if (vida <= 0.05f) vida = 1f; // fallback caso a duração venha 0
+        Destroy(vfx.gameObject, vida);
+    }
+
+    private IEnumerator KnockbackRoutine(Vector3 incoming)
     {
         isKnockedBack = true;
         currentState = State.TakingDamage;
 
-        // ── 1. Para o NavMeshAgent ──────────────────────────────────────
+        // 1. Desliga o NavMeshAgent
         if (nav != null && nav.enabled)
         {
             nav.isStopped = true;
@@ -206,44 +208,46 @@ public class Melee : Enemy
             nav.enabled = false;
         }
 
-        // ── 2. Aplica impulso no Rigidbody ─────────────────────────────
-        if (rb != null && knockbackDir != Vector3.zero)
+        // 2. Lança via VELOCIDADE direta (independe da massa)
+        if (rb != null)
         {
-            rb.isKinematic = false;
-            rb.velocity = Vector3.zero;
+            Vector3 dir = incoming;
+            dir.y = 0f;
+            if (dir.sqrMagnitude < 0.0001f) dir = -transform.forward; // fallback
+            dir.Normalize();
 
-            // Força horizontal pura — evita que o inimigo voe para cima
-            Vector3 force = knockbackDir;
-            force.y = 0.15f; // leve arco, não zerar o y completamente
-            rb.AddForce(force.normalized * knockbackForce, ForceMode.Impulse);
+            // Respeita a força que veio da arma, amplificada; com piso de knockbackForce
+            float strength = Mathf.Max(incoming.magnitude * knockbackMultiplier, knockbackForce);
+
+            rb.isKinematic = false;
+            Vector3 vel = dir * strength;
+            vel.y = strength * upwardBias; // leve arco
+            rb.velocity = vel;
         }
 
-        // ── 3. Aguarda o tempo de voo ───────────────────────────────────
+        // 3. Tempo de voo
         yield return new WaitForSeconds(knockbackDuration);
-
-        // ── 4. Reativa o NavMeshAgent ───────────────────────────────────
         if (this == null || gameObject == null) yield break;
 
+        // 4. Para e volta a ser kinematic
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
             rb.isKinematic = true;
         }
 
-        // Aguarda 1 frame para física terminar
-        yield return null;
+        yield return null; // 1 frame para a física assentar
 
+        // 5. Reativa o NavMeshAgent na posição atual
         if (nav != null)
         {
-            // Warp ressincroniza o agente à posição atual do Transform
             nav.enabled = true;
             nav.Warp(transform.position);
             nav.isStopped = false;
         }
 
-        // ── 5. Stun: parado por stunDuration antes de retomar IA ────────
+        // 6. Stun
         yield return new WaitForSeconds(stunDuration);
-
         if (this == null || gameObject == null) yield break;
 
         isKnockedBack = false;
