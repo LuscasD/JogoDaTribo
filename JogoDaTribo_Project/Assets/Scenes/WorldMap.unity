@@ -576,6 +576,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: sceneToLoad
+      value: Fase2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1191,6 +1195,10 @@ PrefabInstance:
       propertyPath: nodeType
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
+      propertyPath: sceneToLoad
+      value: Fase2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1632,7 +1640,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: nodeID
-      value: Battle3
+      value: Fase1
       objectReference: {fileID: 0}
     - target: {fileID: 6072768585309577159, guid: 19040f6041f57134e9a4778ab619a6f8, type: 3}
       propertyPath: connectedIDs.Array.size

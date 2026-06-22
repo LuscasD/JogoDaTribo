@@ -22,7 +22,7 @@ public class Melee : Enemy
     [Tooltip("Multiplica a força de knockback que vem da arma. Aumente para empurrar mais longe.")]
     [SerializeField] private float knockbackMultiplier = 2.5f;
     [Tooltip("Tempo voando após o impacto.")]
-    [SerializeField] private float knockbackDuration = 0.3f;
+    [SerializeField] private float knockbackFlyTime = 0.3f;
     [Tooltip("Leve arco pra cima (0 = puramente horizontal).")]
     [SerializeField] private float upwardBias = 0.15f;
     [SerializeField] private float stunDuration = 0.4f;
@@ -226,7 +226,7 @@ public class Melee : Enemy
         }
 
         // 3. Tempo de voo
-        yield return new WaitForSeconds(knockbackDuration);
+        yield return new WaitForSeconds(knockbackFlyTime);
         if (this == null || gameObject == null) yield break;
 
         // 4. Para e volta a ser kinematic

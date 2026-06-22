@@ -427,7 +427,7 @@ MonoBehaviour:
   maxDamage: 5
   hitCooldownPerEnemy: 0.4
   knockbackForce: 7
-  tip: {fileID: 4977305334232372707}
+  tip: {fileID: 6538398383918243947}
   sawRadius: 0.5
   enemyLayer:
     serializedVersion: 2
@@ -661,7 +661,8 @@ Transform:
   m_LocalPosition: {x: -0.000015258789, y: -0.0000011920929, z: 0.000024437904}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.9999999}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4505160545503743557}
   m_Father: {fileID: 7842137330299747426}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7637618882934689260
@@ -1605,7 +1606,7 @@ MonoBehaviour:
   maxDamage: 5
   hitCooldownPerEnemy: 0.4
   knockbackForce: 7
-  tip: {fileID: 2239507885289001122}
+  tip: {fileID: 4505160545503743557}
   sawRadius: 0.5
   enemyLayer:
     serializedVersion: 2
@@ -1821,6 +1822,37 @@ Transform:
   m_Children:
   - {fileID: 843692030189895180}
   m_Father: {fileID: 8085854587959061818}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7360196089347888253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4505160545503743557}
+  m_Layer: 10
+  m_Name: Tip
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4505160545503743557
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7360196089347888253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.00000013708573, y: 0.00000005159099, z: 0.000000051921223, w: -1}
+  m_LocalPosition: {x: 0, y: -0, z: 2.11}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2239507885289001122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8337236501585125608
 GameObject:
@@ -2345,6 +2377,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3583593153790645993, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3583593153790645993, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.95
+      objectReference: {fileID: 0}
     - target: {fileID: 5811039082488834295, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
       propertyPath: m_Name
       value: Chainsaw_Aug
@@ -2357,5 +2397,10 @@ PrefabInstance:
 --- !u!4 &4977305334232372707 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3320424613779481441, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
+  m_PrefabInstance: {fileID: 7711979284475803266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6538398383918243947 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3583593153790645993, guid: 1d820b18d0bdf284eb5a9087f2fc061e, type: 3}
   m_PrefabInstance: {fileID: 7711979284475803266}
   m_PrefabAsset: {fileID: 0}

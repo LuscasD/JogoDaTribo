@@ -19,6 +19,8 @@ public class Ranged : Enemy
     [SerializeField] private float tooCloseDistance = 5f;
     [Tooltip("Velocidade de giro para mirar (graus/s).")]
     [SerializeField] private float faceSpeed = 360f;
+    [Tooltip("Corrija se o modelo olhar pro lado. Tente 90, -90 ou 180.")]
+    [SerializeField] private float yawOffset = 0f;
     [Tooltip("Tempo entre tiros.")]
     [SerializeField] private float attackCooldown = 1.5f;
 
@@ -41,7 +43,7 @@ public class Ranged : Enemy
     [Header("Knockback")]
     [SerializeField] private float knockbackForce = 10f;
     [SerializeField] private float knockbackMultiplier = 2.5f;
-    [SerializeField] private float knockbackDuration = 0.3f;
+    [SerializeField] private float knockbackFlyTime = 0.3f;
     [SerializeField] private float upwardBias = 0.15f;
     [SerializeField] private float stunDuration = 0.4f;
 
@@ -156,7 +158,7 @@ public class Ranged : Enemy
         Vector3 dir = t.position - transform.position;
         dir.y = 0f;
         if (dir.sqrMagnitude < 0.0001f) return;
-        Quaternion look = Quaternion.LookRotation(dir);
+        Quaternion look = Quaternion.LookRotation(dir) * Quaternion.Euler(0f, yawOffset, 0f);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, look, faceSpeed * Time.deltaTime);
     }
 
@@ -241,7 +243,7 @@ public class Ranged : Enemy
             rb.velocity = vel;
         }
 
-        yield return new WaitForSeconds(knockbackDuration);
+        yield return new WaitForSeconds(knockbackFlyTime);
         if (this == null || gameObject == null) yield break;
 
         if (rb != null)
