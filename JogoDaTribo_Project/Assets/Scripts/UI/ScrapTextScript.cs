@@ -20,6 +20,6 @@ public class ScrapTextScript : MonoBehaviour
     void Update()
     {
         if(GameManager.Instance != null)
-        scrapText.SetText("Scrap: " + GameManager.Instance.scrap); 
+        scrapText.SetText(GameManager.Instance.scrap.ToString()); 
     }
 }

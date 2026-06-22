@@ -18,7 +18,7 @@ public class PlayerHealth : MonoBehaviour
     private float lastDamageTime = -999f;
     private PlayerMovment movement;
 
-    public TextMeshProUGUI  lifeText;
+    public TextMeshProUGUI lifeText;
 
     private void Awake()
     {
@@ -31,7 +31,7 @@ public class PlayerHealth : MonoBehaviour
             maxHealth = GameManager.Instance.playerHealth;
 
         CurrentHealth = maxHealth;
-        lifeText?.SetText("Vida: " + CurrentHealth);
+        AtualizarVidaUI();
     }
 
     public void TakeDamage(int damage, Vector3 knockbackDir = default)
@@ -41,13 +41,19 @@ public class PlayerHealth : MonoBehaviour
         lastDamageTime = Time.time;
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
         OnHealthChanged?.Invoke(CurrentHealth, maxHealth);
-        lifeText.text = "Vida: "+ CurrentHealth;
+        AtualizarVidaUI();
 
         if (knockbackDir != Vector3.zero)
             movement?.ApplyKnockback(knockbackDir);
 
         if (CurrentHealth <= 0)
             Die();
+    }
+
+    private void AtualizarVidaUI()
+    {
+        if (lifeText != null)
+            lifeText.text = "Vida: " + CurrentHealth;
     }
 
     private void Die()

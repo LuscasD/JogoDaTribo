@@ -1,75 +1,79 @@
 using UnityEngine;
 
+/// <summary>
+/// Rotaciona o torso (Cabeca) na direção do mouse e dá o "soluço" de recuo ao
+/// acertar. É a fonte única de duas informações que os braços leem:
+///   • AngularSpeed → o quão rápido o torso está girando (a serra usa).
+///   • AimForward   → para onde o torso aponta (a arma usa).
+/// </summary>
 public class PlayerAttack : MonoBehaviour
 {
-    [Header("Ataque")]
-    [SerializeField] private int attackDamage = 1;
-    [SerializeField] private float attackRange = 2f;
-    [SerializeField] private float attackCooldown = 0.4f;
-    [SerializeField] private float knockbackForce = 5f;
-    [SerializeField] private float movementLockDuration = 0.2f;
+    [Header("Rotação do Torso")]
+    [SerializeField] private Transform body;          // Cabeca
+    [SerializeField] private float rotateSpeed = 15f;
+    [SerializeField] private float bodyHeightOffset = 1f;
 
-    [Header("Referências (Opcional)")]
-    [SerializeField] private Animator animator;
+    [Header("Feedback de Hit")]
+    [SerializeField] private float rotationFreezeOnHit = 0.15f; // segundos que a rotação para ao acertar
+    [SerializeField] private float hitBumpSpeed = 60f;          // graus/s de "soluço" ao acertar
 
-    private float lastAttackTime = -999f;
-    private int damageBonus = 0;
-    private PlayerMovment movement;
+    private Camera _cam;
+    private float _freezeUntil;
+    private bool _bumpActive;
+    private float _bumpSign = 1f;
+    private Quaternion _lastBodyRot;
 
-    private static readonly int AnimAtacou = Animator.StringToHash("Atacou");
+    public float AngularSpeed { get; private set; }
+    public Vector3 AimForward => body != null ? body.forward : transform.forward;
 
-    private void Awake()
+    public void OnSawHit()
     {
-        if (animator == null)
-            animator = GetComponentInChildren<Animator>();
-        movement = GetComponent<PlayerMovment>();
+        _freezeUntil = Time.time + rotationFreezeOnHit;
+        _bumpActive = true;
+        _bumpSign = Random.value > 0.5f ? 1f : -1f;
+    }
+
+    private void Awake() => _cam = Camera.main;
+
+    private void Start()
+    {
+        if (body != null) _lastBodyRot = body.rotation;
     }
 
     private void Update()
     {
-        if (animator != null)
-            animator.SetBool(AnimAtacou, false);
+        if (Time.time < _freezeUntil) ApplyHitBump();
+        else { _bumpActive = false; RotateBodyTowardsMouse(); }
 
-        if (Input.GetMouseButtonDown(0) && Time.time >= lastAttackTime + attackCooldown)
-            PerformAttack();
-    }
-
-    private void PerformAttack()
-    {
-        lastAttackTime = Time.time;
-
-        movement?.LockMovement(movementLockDuration);
-
-        if (animator != null)
-            animator.SetBool(AnimAtacou, true);
-
-        Vector3 center = transform.position + transform.forward * (attackRange * 0.5f);
-        Collider[] hits = Physics.OverlapSphere(center, attackRange * 0.5f);
-
-        foreach (var hit in hits)
+        if (body != null)
         {
-            if (hit.gameObject == gameObject) continue;
-
-            var enemy = hit.GetComponent<Enemy>();
-            if (enemy == null)
-                enemy = hit.GetComponentInParent<Enemy>();
-
-            if (enemy != null)
-            {
-                Vector3 knockback = (hit.transform.position - transform.position).normalized * knockbackForce;
-                enemy.TakeDamage(attackDamage + damageBonus, knockback);
-            }
+            AngularSpeed = Quaternion.Angle(_lastBodyRot, body.rotation) / Mathf.Max(Time.deltaTime, 1e-5f);
+            _lastBodyRot = body.rotation;
         }
     }
 
-    public void SetDamageBonus(int bonus)
+    private void RotateBodyTowardsMouse()
     {
-        damageBonus = bonus;
+        if (body == null || _cam == null) return;
+
+        Plane bodyPlane = new Plane(Vector3.up, new Vector3(0f, transform.position.y + bodyHeightOffset, 0f));
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
+
+        if (bodyPlane.Raycast(ray, out float dist))
+        {
+            Vector3 worldPoint = ray.GetPoint(dist);
+            Vector3 direction = worldPoint - body.position;
+            direction.y = 0f;
+            if (direction.sqrMagnitude < 0.01f) return;
+
+            Quaternion target = Quaternion.LookRotation(direction, Vector3.up);
+            body.rotation = Quaternion.Slerp(body.rotation, target, rotateSpeed * Time.deltaTime);
+        }
     }
 
-    private void OnDrawGizmos()
+    private void ApplyHitBump()
     {
-        Gizmos.color = new Color(0.2f, 0.6f, 1f, 0.35f);
-        Gizmos.DrawSphere(transform.position + transform.forward * (attackRange * 0.5f), attackRange * 0.5f);
+        if (!_bumpActive || body == null) return;
+        body.Rotate(Vector3.up, _bumpSign * hitBumpSpeed * Time.deltaTime, Space.World);
     }
 }
